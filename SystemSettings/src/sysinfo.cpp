@@ -44,11 +44,20 @@ QVariantList detailSizes(const QList<QPair<QString, QString>> &entries)
 
 } // namespace
 
-SysInfo::SysInfo(QObject *parent) : QObject(parent) {}
+// Disk totals are cheap and several pages show them; the per-category directory
+// walk is not, so it waits for refresh() from a Storage page.
+SysInfo::SysInfo(QObject *parent) : QObject(parent)
+{
+    struct statvfs st {};
+    if (statvfs("/", &st) == 0) {
+        m_total = double(st.f_blocks) * double(st.f_frsize);
+        m_used = double(st.f_blocks - st.f_bfree) * double(st.f_frsize);
+    }
+}
 
 void SysInfo::refresh()
 {
-    if (g_scanning)
+    if (g_scanning || !m_cats.isEmpty()) // once per launch
         return;
     g_scanning = true;
     m_scanning = true;

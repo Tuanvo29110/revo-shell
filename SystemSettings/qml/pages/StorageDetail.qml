@@ -10,7 +10,10 @@ Column {
     signal navigate(string pageId)
 
     readonly property string catKey: pageId.indexOf("gen.storage.") === 0 ? pageId.slice(12) : ""
-    readonly property var rows: SysInfo.details(catKey)
+    // reading `scanning` re-evaluates this when the scan finishes
+    readonly property var rows: { SysInfo.scanning; return SysInfo.details(catKey) }
+
+    Component.onCompleted: SysInfo.refresh()
 
     width: parent ? parent.width : 700
     spacing: 12
@@ -46,7 +49,7 @@ Column {
         width: parent.width - 56
         visible: page.rows.length > 0
         wrapMode: Text.WordWrap
-        text: "Total: " + SysInfo.fmt(SysInfo.category(page.catKey))
+        text: { page.rows; return "Total: " + SysInfo.fmt(SysInfo.category(page.catKey)) }
         font { family: Theme.fontText; pixelSize: 12 }
         color: Theme.textSecondary
     }

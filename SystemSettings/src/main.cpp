@@ -27,7 +27,6 @@ int main(int argc, char *argv[])
 
     SysInfo sysInfo;
     engine.rootContext()->setContextProperty("SysInfo", &sysInfo);
-    sysInfo.refresh();
 
     ShellCtl shell;
     engine.rootContext()->setContextProperty("Shell", &shell);
