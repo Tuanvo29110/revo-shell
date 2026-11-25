@@ -845,18 +845,6 @@ deploy_quickshell
 copy_tree "$ROOT/wallpapers" "$HOME/Pictures/Wallpapers"
 copy_tree "$ROOT/rofi" "$HOME/.config/rofi"
 copy_tree "$ROOT/kitty" "$HOME/.config/kitty"
-# Siri backend for the macOS shell: scripts + sounds only — never touches the
-# user's downloaded models/voices (those come from siri27/src/fetch.sh)
-if [[ -d "$ROOT/siri27" ]]; then
-  run "mkdir -p '$HOME/.local/share/siri27'"
-  if have rsync; then
-    run "rsync -a '$ROOT/siri27/' '$HOME/.local/share/siri27/'" || log "siri27 copy failed (continuing)"
-  else
-    run "cp -a '$ROOT/siri27/.' '$HOME/.local/share/siri27/'" || log "siri27 copy failed (continuing)"
-  fi
-  run "chmod +x '$HOME/.local/share/siri27/src/fetch.sh' 2>/dev/null || true"
-fi
-
 if [[ "$DRY_RUN" != "1" ]]; then
   find "$HOME/.config/hypr" -type f -name '*.sh' -exec chmod +x {} + 2>/dev/null || true
   find "$HOME/.config/quickshell" -type f \( -name '*.sh' -o -name '*.fish' -o -name 'instalar' -o -name 'install.sh' \) -exec chmod +x {} + 2>/dev/null || true

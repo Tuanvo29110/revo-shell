@@ -14,7 +14,6 @@ import "./modules/controlcenter"
 import "./modules/desktop"
 import "./modules/settings"
 import "./modules/launcher"
-import "./modules/siri"
 import "./modules/hotcorners"
 
 ShellRoot {
@@ -32,7 +31,6 @@ ShellRoot {
     ForceQuit {}
     ControlCenter {}
     Settings {}
-    Siri {}
     HotCorners {}
 
     // eqsh LockScreen (ext-session-lock) replaces the old PanelWindow lock

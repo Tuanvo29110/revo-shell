@@ -18,7 +18,6 @@ https://github.com/user-attachments/assets/42df3de9-9fab-4843-9afc-35f82d5852f7
 | `rofi/` | `~/.config/rofi` |
 | `kitty/` | `~/.config/kitty` |
 | `SystemSettings/` | built → `~/.local/bin/systemsettings` |
-| `siri27/` | `~/.local/share/siri27` (Siri backend, see `siri27/README.md`) |
 | `extras/electron-tl/` | optional: macOS traffic lights for Electron apps |
 | `install.sh` | **run this (CLI)** |
 | `update` / `update.sh` | **run this to pull new additions** |
@@ -55,7 +54,7 @@ What `install.sh` does:
 3. Installs **system packages** needed by the installer and shells
 4. Installs AUR packages via yay/paru when available (`quickshell-git`, fonts, …)
 5. Installs Python deps (`pip --user`)
-6. Deploys `hypr/`, `quickshell/` (all shells), `rofi/`, `kitty/` → `~/.config/`, `wallpapers/` → `~/Pictures/Wallpapers`, `siri27/` → `~/.local/share/siri27` (Siri for the macOS shell)
+6. Deploys `hypr/`, `quickshell/` (all shells), `rofi/`, `kitty/` → `~/.config/`, `wallpapers/` → `~/Pictures/Wallpapers`
 7. Sets the **first selected shell** as the Hyprland default (`# REVO_DEFAULT_SHELL` in autostart) — a previously saved default is re-applied on updates
 8. Rewrites hardcoded `/home/revo` → `$HOME`
 9. Builds CMake shells (caelestia + Clavis) and the **SystemSettings** app → `~/.local/bin/systemsettings`
@@ -126,6 +125,24 @@ Launch a shell:
 qs -p ~/.config/quickshell/lucid
 qs -p ~/.config/quickshell/brain_shell
 ```
+
+### Leftovers from Siri (optional cleanup)
+
+Siri / Apple Intelligence has been removed. Updating never deletes files, so an
+older install keeps some that nothing loads any more. Check them, back up what
+you want to keep, then delete them yourself:
+
+| Path | Contains |
+|------|----------|
+| `~/.config/siri27/` | settings, **including any API keys you entered** |
+| `~/.local/share/siri27/` | backend scripts, downloaded speech/voice models, whisper.cpp, Piper, **conversation history** (`history.jsonl`) |
+| `~/.cache/siri27/` | download logs |
+| `~/.config/hypr/configs/siri.lua` | old shortcut file |
+| `~/.config/quickshell/macos/modules/siri/`, `~/.config/quickshell/macos/assets/siri/` | old shell module and images |
+
+Ollama and its models are a separate program and are left alone. Run
+`hyprctl reload` and restart the shell (or log out and back in) to drop the old
+shortcuts and any running Siri module.
 
 ## Install (GUI)
 

@@ -441,7 +441,7 @@ var content = {
             { t: "Find My", sw: true, on: true, to: "acct.findMy" },
             { t: "System Services", c: true }
         ] },
-        { note: "Location Services uses your location to improve features such as Maps and Siri." }
+        { note: "Location Services uses your location to improve features such as Maps." }
     ],
     "privacy.contacts": [ { rows: [ { t: "Calendar", sw: true, on: true }, { t: "Safari", sw: false, on: false }, { t: "Mail", sw: true, on: true } ] } ],
     "privacy.calendars": [ { rows: [ { t: "Safari", sw: true, on: true }, { t: "Reminders", sw: true, on: true } ] } ],
@@ -460,7 +460,6 @@ var content = {
         { rows: [
             { t: "Share Mac Analytics", sw: true, on: true },
             { t: "Share iCloud Analytics", sw: false, on: false },
-            { t: "Improve Siri", sw: true, on: true },
             { t: "Share with App Developers", sw: false, on: false }
         ] }
     ],
@@ -561,13 +560,6 @@ var content = {
             { t: "Deliver notifications", v: "Immediately" },
             { t: "Automatically silence", sw: true, on: false },
             { t: "Time sensitive notifications", sw: true, on: true }
-        ] }
-    ],
-    "notifications.summaries": [
-        { rows: [
-            { t: "Summarise notifications", sw: true, on: true },
-            { t: "Scheduled Summary", sw: true, on: true },
-            { t: "Time", v: "08:00, 12:00, 18:00" }
         ] }
     ],
 
@@ -780,7 +772,6 @@ var titles = {
     "wallpaper.dynamic": "Wallpaper Options",
     "notifications.appSettings": "Application Settings",
     "notifications.focus": "Focus",
-    "notifications.summaries": "Notification Summaries",
     "focus.iCloud": "Focus & iCloud",
     "focus.schedules": "Schedules",
     "focus.filters": "Focus Filters",
@@ -1258,7 +1249,6 @@ content["accessibility"] = [
     { header: "General", rows: [
         { t: "Read & Speak", c: true, to: "acc.readSpeak" },
         { t: "Hover Text", c: true, to: "acc.hoverText" },
-        { t: "Siri", c: true, to: "siri" },
         { t: "Shortcut", v: "Triple-press Touch ID" }
     ] },
     { note: "Accessibility features make it easier to see, hear, and interact with your Mac." }
@@ -1332,8 +1322,7 @@ content["notifications"] = [
         { t: "Allow notifications when the display is sleeping", sw: true, cfg: "notifications.whenSleeping", def: true },
         { t: "Allow notifications when the screen is locked", sw: true, cfg: "notifications.whenLocked", def: true },
         { t: "Allow notifications when mirroring or sharing the display", sw: true, cfg: "notifications.whenSharing", def: false },
-        { t: "Play sound for notification", sw: true, cfg: "notifications.sound", def: true },
-        { t: "Summarize notifications", sw: true, on: false, to: "notifications.summaries" }
+        { t: "Play sound for notification", sw: true, cfg: "notifications.sound", def: true }
     ] },
     { header: "Application Notifications", rows: [
         { t: "Notification Center", b: "Open", ipct: "notificationCenter", ipcf: "toggle" },
@@ -1353,17 +1342,6 @@ content["focus"] = [
         { t: "Add Schedule…", c: true, to: "focus.schedules" }
     ] },
     { note: "When a Focus is on, notifications from the shell are silenced and banners are hidden. Do Not Disturb also appears in the menu bar." }
-]
-content["siri"] = [
-    { rows: [
-        { t: "Apple Intelligence & Siri", s: "Ask the shell assistant about anything.", sw: true, cfg: "siri.enabled", def: true },
-        { t: "Ask Siri", b: "Open", ipct: "ai", ipcf: "toggle" },
-        { t: "Keyboard shortcut", v: "Hold ⌘ Space" },
-        { t: "Show Siri in menu bar", sw: true, cfg: "menubar.siri", def: false }
-    ] },
-    { header: "Siri & Dictation History", rows: [
-        { t: "Delete Siri & Dictation History…", red: true, c: true, run: "rm -f \"$HOME/.cache/quickshell/sigrid_history.json\" 2>/dev/null; notify-send 'Siri' 'Siri & Dictation history deleted.'" }
-    ] }
 ]
 content["touchIDPassword"] = [
     { header: "Login Password", rows: [

@@ -356,7 +356,6 @@ class InstallationWorker(QObject):
 
             self.progress_changed.emit(76, "Installing rofi & kitty configs…")
             desk_result = self._install_desktop_configs()
-            self._install_siri27()
 
             # 4) Rewrite absolute /home/revo paths → current $HOME
             self.progress_changed.emit(80, "Fixing home paths…")
@@ -1240,21 +1239,6 @@ class InstallationWorker(QObject):
             logger.info(f"dock: {(r.stdout or r.stderr).strip().splitlines()[0] if (r.stdout or r.stderr) else 'done'}")
         except Exception as e:
             logger.warning(f"dock setup skipped: {e}")
-
-    def _install_siri27(self) -> None:
-        """Siri backend for the macOS shell → ~/.local/share/siri27 (scripts +
-        sounds only; models/voices are fetched later by src/fetch.sh)."""
-        try:
-            repo_dir = self._staged_repo
-            src = repo_dir / "siri27" if repo_dir else None
-            if src and src.is_dir():
-                n = self._copy_tree(src, Path.home() / ".local" / "share" / "siri27")
-                fetch = Path.home() / ".local" / "share" / "siri27" / "src" / "fetch.sh"
-                if fetch.is_file():
-                    os.chmod(str(fetch), 0o755)
-                logger.info(f"siri27 backend: {n} files")
-        except Exception as e:
-            logger.warning(f"siri27 install skipped: {e}")
 
     def _install_desktop_configs(self) -> Dict:
         """Deploy monorepo rofi/ and kitty/ → ~/.config/{rofi,kitty}.

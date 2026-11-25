@@ -100,10 +100,5 @@ if hl.plugin and hl.plugin.hypr3d and hl.plugin.hypr3d.toggle then
     
 end
 
--- Siri (macOS 27 port, ~/.config/quickshell/macos/modules/siri)
-hl.bind(mainMod .. " + ALT + Space", hl.dsp.exec_cmd("qs ipc -p " .. (os.getenv("HOME") or "") .. "/.config/quickshell/macos call siri listen"))
--- Siri keyboard shortcut (press = type, hold = speak): set in System Settings › Apple Intelligence & Siri
-pcall(require, "configs.siri")
-
 -- Trackpad gestures (System Settings › Trackpad)
 pcall(require, "configs.gestures")

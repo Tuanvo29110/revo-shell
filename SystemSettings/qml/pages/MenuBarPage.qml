@@ -21,7 +21,6 @@ Column {
         autoHide: "bar.autohideMode",
         showBackground: "bar.showBackground",
         recentDocs: "bar.recentDocs",
-        siri: "menubar.siri",
         spotlight: "menubarSpotlight",
         wifi: "menubarWifi",
         bluetooth: "menubarBluetooth",
@@ -79,7 +78,7 @@ Column {
     function resetControls() {
         var defs = { spotlight: true, wifi: true, bluetooth: true, battery: true, sound: true,
                      display: true, nowPlaying: true, focus: true, mirror: true, clock: true,
-                     tray: true, controlCenter: true, siri: false, timeMachine: false, weather: false }
+                     tray: true, controlCenter: true, timeMachine: false, weather: false }
         for (var k in defs)
             page.set(k, defs[k])
         Shell.uset("menubarKeyboard", true)
@@ -99,7 +98,6 @@ Column {
         property string autoHide: String(page.g("autoHide", "In Full Screen Only"))
         property bool showBackground: page.g("showBackground", false) === true
         property string recentDocs: String(page.g("recentDocs", "10"))
-        property bool siri: page.g("siri", false) === true
         property bool spotlight: page.g("spotlight", true) === true
         property bool wifi: page.g("wifi", true) === true
         property bool bluetooth: page.g("bluetooth", true) === true
@@ -196,14 +194,6 @@ Column {
             showButton: true
             buttonLabel: "Clock Options…"
             onButtonClicked: page.navigate("menuBar.clock")
-        }
-        MenuControlRow {
-            separator: true
-            iconFile: "sb_apple-intelligence"
-            title: "Siri"
-            showSwitch: true
-            switchOn: mb.siri
-            onToggled: page.set("siri", checked)
         }
         MenuControlRow {
             separator: true

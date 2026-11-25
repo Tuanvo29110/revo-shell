@@ -26,7 +26,8 @@ ApplicationWindow {
     // glass (the compositor blur shows through it) and corners match Tahoe.
     color: "transparent"
 
-    property string selectedId: lastPane.id.length > 0 ? lastPane.id : "general"
+    // a remembered pane that no longer exists falls back to General
+    property string selectedId: Pages.info[lastPane.id] || Content.titles[lastPane.id] ? lastPane.id : "general"
     // hardware presence decides which panes macOS shows (Battery vs Energy,
     // Mouse, Trackpad) — same predicates as the representations in the
     // extensions' Info.plist (powersource.battery, device.mouse, device.trackpad)

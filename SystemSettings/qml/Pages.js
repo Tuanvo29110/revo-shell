@@ -2,7 +2,7 @@
 
 // Root pages (sidebar destinations)
 var roots = ["appleId", "wifi", "bluetooth", "network", "battery", "energy",
-    "general", "accessibility", "appearance", "menuBar", "siri", "desktopDock",
+    "general", "accessibility", "appearance", "menuBar", "desktopDock",
     "displays", "spotlight", "wallpaper", "notifications", "sound", "focus",
     "screenTime", "lockScreen", "privacySecurity", "touchIDPassword",
     "usersGroups", "internetAccounts", "gameCenter", "icloud", "walletApplePay",
@@ -19,7 +19,6 @@ var info = {
     accessibility: { title: "Accessibility", icon: "sb_accessibility", root: true },
     appearance: { title: "Appearance", icon: "sb_dark-mode", root: true },
     menuBar: { title: "Menu Bar", icon: "sb_controlcenter.settings", root: true },
-    siri: { title: "Apple Intelligence & Siri", icon: "sb_apple-intelligence", root: true },
     desktopDock: { title: "Desktop & Dock", icon: "sb_desktop", root: true },
     displays: { title: "Displays", icon: "sb_display", root: true },
     spotlight: { title: "Spotlight", icon: "sb_spotlight", root: true },
@@ -117,15 +116,7 @@ var info = {
     "sound.input": { title: "Input" },
 
     "battery.health": { title: "Battery Health" },
-    "battery.options": { title: "Options" },
-
-    // Apple Intelligence & Siri sub-pages
-    "siri.responses": { title: "Siri Responses" },
-    "siri.voice": { title: "Voice" },
-    "siri.privacy": { title: "Ask Siri, Dictation & Privacy" },
-    "siri.ext.chatgpt": { title: "ChatGPT" },
-    "siri.ext.claude": { title: "Claude" },
-    "siri.ext.local": { title: "Local Model" }
+    "battery.options": { title: "Options" }
 }
 
 // Pages with a dedicated QML file (relative to qml/ directory)
@@ -156,16 +147,9 @@ var files = {
     "battery.health": "pages/BatteryPage.qml",
     "battery.options": "pages/BatteryPage.qml",
     icloud: "pages/IcloudPage.qml",
-    siri: "pages/SiriPage.qml",
     trackpad: "pages/TrackpadPage.qml",
     "gen.about": "pages/AboutPage.qml",
     "gen.softwareUpdate": "pages/SoftwareUpdatePage.qml",
     gameCenter: "pages/GameCenterPage.qml",
-    screenTime: "pages/ScreenTimePage.qml",
-    "siri.responses": "pages/SiriPage.qml",
-    "siri.voice": "pages/SiriPage.qml",
-    "siri.privacy": "pages/SiriPage.qml",
-    "siri.ext.chatgpt": "pages/SiriPage.qml",
-    "siri.ext.claude": "pages/SiriPage.qml",
-    "siri.ext.local": "pages/SiriPage.qml"
+    screenTime: "pages/ScreenTimePage.qml"
 }

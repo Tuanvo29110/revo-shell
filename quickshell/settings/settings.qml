@@ -70,7 +70,7 @@ Window {
         var aa = { appleid:1, family:1, wifi:1, bluetooth:1, network:1, vpn:1, general:1,
                    notifications:1, sound:1, lockscreen:1, privacy:1, touchid:1, users:1,
                    internet:1, gamecenter:1, icloud:1, wallet:1, passwords:1, keyboard:1,
-                   sirispotlight:1, appearance:1, lockdown:1, energy:1 }
+                   spotlight:1, appearance:1, lockdown:1, energy:1 }
         if (aa[id]) return icondir + "aa_" + id + ".png"
         var h = 0; for (var i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0
         return icondir + iconPool[h % iconPool.length]
@@ -85,7 +85,7 @@ Window {
         { items:[ {id:"lockscreen", label:"Lock Screen"}, {id:"privacy", label:"Privacy & Security"}, {id:"touchid", label:"Touch ID & Password"}, {id:"users", label:"Users & Groups"} ]},
         { items:[ {id:"internet", label:"Internet Accounts"}, {id:"gamecenter", label:"Game Center"}, {id:"icloud", label:"iCloud"}, {id:"wallet", label:"Wallet"}, {id:"passwords", label:"Passwords"} ]},
         { items:[ {id:"keyboard", label:"Keyboard"}, {id:"mouse", label:"Mouse"}, {id:"trackpad", label:"Trackpad"}, {id:"printers", label:"Printers & Scanners"} ]},
-        { items:[ {id:"dock", label:"Dock"}, {id:"menubar", label:"Menu Bar"}, {id:"controlcenter", label:"Control Center"}, {id:"sirispotlight", label:"Siri & Spotlight"}, {id:"appearance", label:"Appearance"} ]},
+        { items:[ {id:"dock", label:"Dock"}, {id:"menubar", label:"Menu Bar"}, {id:"controlcenter", label:"Control Center"}, {id:"spotlight", label:"Spotlight"}, {id:"appearance", label:"Appearance"} ]},
         { items:[ {id:"lockdown", label:"Lockdown Mode"}, {id:"energy", label:"Energy"}, {id:"softwareupdate", label:"Software Update"} ]}
     ]
     property string current: "dock"
@@ -237,7 +237,7 @@ Window {
             { kind:"toggle", key:"ccNowPlaying", label:"Now Playing" },
             { kind:"toggle", key:"ccSound", label:"Sound" }
         ]} ],
-        sirispotlight: [ { title:"", rows:[ { kind:"toggle", key:"siriEnabled", label:"Enable Ask Siri" }, { kind:"nav", label:"Siri & Spotlight", value:"" }, { kind:"nav", label:"Search Privacy", value:"" }, { kind:"nav", label:"Search Results", value:"" } ]} ],
+        spotlight: [ { title:"", rows:[ { kind:"nav", label:"Search Privacy", value:"" }, { kind:"nav", label:"Search Results", value:"" } ]} ],
         softwareupdate: [ { title:"", rows:[ { kind:"toggle", key:"autoUpdate", label:"Automatic Updates" }, { kind:"nav", label:"Advanced", value:"" } ]} ],
         energy: [ { title:"", rows:[ { kind:"toggle", key:"lowPower", label:"Low Power Mode" }, { kind:"popup", key:"energyDisplay", value:"After 10 minutes", label:"Turn display off after" } ]} ],
         lockdown: [ { title:"", rows:[ { kind:"toggle", key:"lockdown", label:"Lockdown Mode" } ]} ]

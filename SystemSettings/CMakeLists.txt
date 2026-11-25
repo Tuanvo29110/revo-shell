@@ -106,7 +106,6 @@ qt_add_qml_module(systemsettings
         qml/pages/SpotlightPage.qml
         qml/pages/DisplaysPage.qml
         qml/pages/LockScreenPage.qml
-        qml/pages/SiriPage.qml
         qml/pages/TrackpadPage.qml
         qml/pages/AboutPage.qml
         qml/pages/SoftwareUpdatePage.qml

@@ -61,7 +61,6 @@ map_mac() {
         contacts|kaddressbook|gnomecontacts)         echo "Contacts"; return 0 ;;
         notes|gnomenotes)                            echo "Notes"; return 0 ;;
         calculator|kcalc|gnomecalculator)            echo "Calculator"; return 0 ;;
-        siriassistant|siri)                          echo "Siri"; return 0 ;;
         appstore|discover|pamac|gnomesoftware)       echo "App Store"; return 0 ;;
         iphonemirroring)                             echo "iPhone Mirroring"; return 0 ;;
         settings|systemsettings|pearossettings*)      echo "System Settings"; return 0 ;;

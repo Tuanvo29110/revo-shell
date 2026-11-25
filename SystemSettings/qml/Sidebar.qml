@@ -39,7 +39,6 @@ Item {
                 { id: "general", title: "General", icon: "sb_gear" },
                 { id: "accessibility", title: "Accessibility", icon: "sb_accessibility" },
                 { id: "appearance", title: "Appearance", icon: "sb_dark-mode" },
-                { id: "siri", title: "Apple Intelligence & Siri", icon: "sb_apple-intelligence" },
                 { id: "desktopDock", title: "Desktop & Dock", icon: "sb_desktop" },
                 { id: "displays", title: "Displays", icon: "sb_display" },
                 { id: "menuBar", title: "Menu Bar", icon: "sb_controlcenter.settings" },
