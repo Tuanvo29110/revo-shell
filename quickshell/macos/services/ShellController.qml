@@ -140,31 +140,11 @@ Singleton {
         root.action(cmd);
     }
 
-    Timer {
-        id: _pollTimer
-        interval: 250
-        running: true
-        repeat: true
-        onTriggered: {
-            if (!_cmdProc.running) _cmdProc.running = true;
+    // qs ipc -p ~/.config/quickshell/macos call shell command <name>
+    IpcHandler {
+        target: "shell"
+        function command(cmd: string): void {
+            root.handleCommand(cmd);
         }
     }
-
-    Process {
-        id: _cmdProc
-        running: false
-        // mv instead of rm: rename() works in sticky /tmp even when the file
-        // is owned by another user, so a stale command can never loop.
-        command: ["bash", "-c",
-            "if [ -f /tmp/macos_cmd ]; then cat /tmp/macos_cmd; mv -f /tmp/macos_cmd /tmp/.macos_cmd_done 2>/dev/null || true; fi"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                _cmdProc.running = false;
-                const cmd = text.trim();
-                if (cmd && cmd !== root.lastCmd) { root.lastCmd = cmd; root.handleCommand(cmd); }
-            }
-        }
-    }
-
-    property string lastCmd: ""
 }
