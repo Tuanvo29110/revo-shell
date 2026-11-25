@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Io
+import Qt.labs.folderlistmodel
 import "../../services"
 import "../common"
 
@@ -22,15 +23,22 @@ PanelWindow {
 
     height: root.dockVertical ? root.capsuleWidth + 2 * root.fishPad : root.winThick
     width: root.winThick
-    property bool isTrashFull: false
+    readonly property string trashDir: Quickshell.env("HOME") + "/.local/share/Trash/files"
+    property bool trashWatched: false
+    readonly property bool isTrashFull: trashWatched && trashFiles.count > 0
 
     // ── 2. العناصر المستقلة (تأتي بعد الخصائص مباشرة) ──
+    // FolderListModel watches the directory, which has to exist first
+    FolderListModel {
+        id: trashFiles
+        showHidden: true
+    }
     Process {
-        id: trashChecker
-        command: ["sh", "-c", "ls -A ~/.local/share/Trash/files"]
-        running: false
-        stdout: StdioCollector {
-            onStreamFinished: { root.isTrashFull = text.trim().length > 0; }
+        command: ["mkdir", "-p", root.trashDir]
+        running: true
+        onExited: {
+            trashFiles.folder = "file://" + root.trashDir;
+            root.trashWatched = true;
         }
     }
 
@@ -38,15 +46,6 @@ PanelWindow {
         id: minRestoreProc
         running: false
         stdout: StdioCollector {}
-    }
-
-    Timer {
-        id: trashTimer
-        interval: 1500
-        running: true
-        repeat: true
-        triggeredOnStart: true
-        onTriggered: { if (!trashChecker.running) trashChecker.running = true; }
     }
 
     // ── Downloads stack + screenshot items ──
@@ -293,7 +292,6 @@ PanelWindow {
         id: shotTrash
         running: false
         stdout: StdioCollector {}
-        onExited: { if (!trashChecker.running) trashChecker.running = true; }
     }
 
 
