@@ -48,7 +48,7 @@ map_mac() {
         steam|steampipe|comvalvesoftwaresteam) echo "steam"; return 0 ;;
         telegramdesktop|telegram) echo "org.telegram.desktop"; return 0 ;;
         blender) echo "blender"; return 0 ;;
-        *zen*) echo "zen-browser"; return 0 ;;
+        zen|zenalpha|zenbeta|zentwilight|*zenbrowser*) echo "zen-browser"; return 0 ;;
         code|codium|codeoss|vscodium|visualstudiocodeoss) echo "code"; return 0 ;;
         visualstudio*|zed) echo "Xcode"; return 0 ;;
         kitty|konsole|console|alacritty|gnometerminal|wezterm|tilix) echo "Terminal"; return 0 ;;
@@ -143,7 +143,7 @@ find_icon() {
 }
 
 for d in /usr/share/icons/hicolor/{scalable,512x512,256x256,128x128,96x96,72x72,64x64,48x48,32x32}/apps \
-         "$HOME/.local/share/icons/hicolor/{scalable,512x512,256x256,128x128,96x96,72x72,64x64,48x48,32x32}/apps" \
+         "$HOME"/.local/share/icons/hicolor/{scalable,512x512,256x256,128x128,96x96,72x72,64x64,48x48,32x32}/apps \
          /usr/share/icons/breeze/apps \
          /usr/share/icons/Papirus/{scalable,64x64,48x48,32x32}/apps \
          /usr/share/icons/Adwaita/{scalable,256x256,128x128,64x64,48x48,32x32}/apps \
@@ -157,14 +157,14 @@ for d in /usr/share/applications "$HOME/.local/share/applications"; do
     for de in "$d"/*.desktop; do
         [ -f "$de" ] || continue
         fuzzy="${id//[._-]/[ ._-]}"
-        if grep -qiE "(^Exec=.*[ /]$id([ ./]|$))|(^StartupWMClass[[:space:]]*=[[:space:]]*$fuzzy$)" "$de"; then
+        if grep -qiE "(^Exec=(.*[ /])?$id([ ./]|$))|(^StartupWMClass[[:space:]]*=[[:space:]]*$fuzzy$)" "$de"; then
             ico=$(grep -m1 "^Icon=" "$de" | cut -d= -f2- | tr -d '\r')
             [ -z "$ico" ] && continue
             [ -f "$ico" ] && { echo "$ico"; exit 0; }
             IFS=/ read -ra segs <<< "$ico"
             for s in "${segs[@]}"; do short=$s; done
-            for d2 in /usr/share/icons/hicolor/{scalable,256x256,128x128,96x96,72x72,64x64,48x48,32x32}/apps \
-                      "$HOME/.local/share/icons/hicolor/{scalable,256x256,128x128,96x96,72x72,64x64,48x48,32x32}/apps" \
+            for d2 in /usr/share/icons/hicolor/{scalable,512x512,256x256,128x128,96x96,72x72,64x64,48x48,32x32}/apps \
+                      "$HOME"/.local/share/icons/hicolor/{scalable,512x512,256x256,128x128,96x96,72x72,64x64,48x48,32x32}/apps \
                       /usr/share/icons/breeze/apps \
                       /usr/share/pixmaps; do
                 [ -d "$d2" ] || continue
@@ -174,7 +174,6 @@ for d in /usr/share/applications "$HOME/.local/share/applications"; do
                     done
                 done
             done
-            exit 0
         fi
     done
 done
