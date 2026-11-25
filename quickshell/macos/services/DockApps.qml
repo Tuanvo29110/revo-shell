@@ -59,8 +59,6 @@ Singleton {
         _dockFile.setText(JSON.stringify({ version: 1, pinned: root.pinned }, null, 2));
     }
 
-    property bool trashEmpty: true
-
     // ── Downloads stack (IPC + diagnostics) ──
     property bool downloadsOpen: false
     property string stackState: ""
@@ -79,31 +77,29 @@ Singleton {
     property bool _iconBusy: false
     property bool _iconDone: false
     property var _iconProc: null
+    property string _iconId: ""
     property string _signature: ""
-    property var badgeCounts: ({})
-    readonly property string badgeScript: Qt.resolvedUrl("../scripts/badge_reader.sh").toString().replace(/^file:\/\//, "")
+    // unread counts from notifications, kept until the app is focused
+    property var notificationBadges: ({})
     readonly property string minScript: "/home/revo/.config/hypr/scripts/minimize_window.py"
     property var _focusIds: []
 
     // windows genie-minimized into the Dock (thumbnails between apps and separator)
-    property var minimizedItems: []
+    property var _minAll: []
+    // Desktop & Dock › "Minimize windows into application icon": no separate
+    // tiles — clicking the app icon restores them (hasmin/clickrestore)
+    readonly property var minimizedItems:
+        ((Appearance.userCfg || {}).dock || {}).minimizeIntoIcon === true ? [] : root._minAll
     property string _minStatePath: "/home/revo/.cache/hypr_minimized.json"
 
-    Process {
-        id: _minPoll
-        running: false
-        command: ["cat", root._minStatePath]
-        stdout: StdioCollector {
-            onStreamFinished: root._onMinJson(text)
-        }
-    }
-
-    Timer {
-        id: _minTimer
-        interval: 900
-        running: true
-        repeat: true
-        onTriggered: { if (!_minPoll.running) _minPoll.running = true; }
+    // minimize_window.py replaces this file atomically on every change
+    FileView {
+        path: root._minStatePath
+        watchChanges: true
+        printErrors: false
+        onFileChanged: reload()
+        onLoaded: root._onMinJson(text())
+        onLoadFailed: root._minAll = []
     }
 
     function _onMinJson(text) {
@@ -121,12 +117,9 @@ Singleton {
                     });
                 }
             }
-            // Desktop & Dock › "Minimize windows into application icon": no separate
-            // tiles — clicking the app icon restores them (hasmin/clickrestore)
-            const intoIcon = ((Appearance.userCfg || {}).dock || {}).minimizeIntoIcon === true;
-            root.minimizedItems = intoIcon ? [] : items;
+            root._minAll = items;
         } catch (e) {
-            root.minimizedItems = [];
+            root._minAll = [];
         }
     }
 
@@ -161,37 +154,70 @@ Singleton {
         }
     }
 
-    function incrementBadge(appId) {
-        if (appId in root.badgeCounts) {
-            root.badgeCounts[appId] = root.badgeCounts[appId] + 1;
-        } else {
-            root.badgeCounts[appId] = 1;
+    // only a bracketed number is a badge: (3), [12], (99+), (17,761).
+    // A bare four-digit 19xx / 20xx in brackets is a year.
+    function _titleCount(title) {
+        const re = /[\(\[](\d+(?:,\d{3})*)\+?[\)\]]/g;
+        let m;
+        while ((m = re.exec(title || "")) !== null) {
+            if (/^(19|20)\d\d$/.test(m[1])) continue;
+            const count = parseInt(m[1].replace(/,/g, ""), 10);
+            if (count > 0) return count;
         }
-        root.badgeCounts = root.badgeCounts;
+        return 0;
     }
 
-    function setBadge(appId, count) {
-        if (count > 0) {
-            root.badgeCounts[appId] = count;
-        } else {
-            delete root.badgeCounts[appId];
+    // badge key (appIds[0]) of the Dock item a window class or app name belongs to
+    function _badgeKey(name) {
+        const n = String(name || "").trim().toLowerCase();
+        if (!n) return "";
+        for (const it of root.dockItems) {
+            if (it.appIds.some(id => String(id).toLowerCase() === n)) return it.appIds[0];
         }
-        root.badgeCounts = root.badgeCounts;
+        for (const it of root.dockItems) {
+            // empty fields must be skipped: every string includes ""
+            if ([it.name, it.exec, it.desktop].some(v => {
+                const s = String(v || "").toLowerCase();
+                return s !== "" && (n.includes(s) || s.includes(n));
+            })) return it.appIds[0];
+        }
+        return "";
+    }
+
+    // counts shown in window titles; re-evaluates when a window or title changes
+    readonly property var titleBadges: {
+        const counts = {};
+        for (const t of ToplevelManager.toplevels.values) {
+            const count = root._titleCount(t.title);
+            if (count <= 0) continue;
+            const key = root._badgeKey(root._normalizeId(t));
+            if (key) counts[key] = Math.max(counts[key] || 0, count);
+        }
+        return counts;
+    }
+
+    function incrementBadge(appId) {
+        const next = Object.assign({}, root.notificationBadges);
+        next[appId] = (next[appId] || 0) + 1;
+        root.notificationBadges = next;
     }
 
     function clearBadge(appId) {
-        if (appId in root.badgeCounts) {
-            delete root.badgeCounts[appId];
-            root.badgeCounts = root.badgeCounts;
-        }
-    }
-
-    function clearAllBadges() {
-        root.badgeCounts = {};
+        if (!(appId in root.notificationBadges)) return;
+        const next = Object.assign({}, root.notificationBadges);
+        delete next[appId];
+        root.notificationBadges = next;
     }
 
     function badgeFor(appId) {
-        return root.badgeCounts[appId] || 0;
+        return Math.max(root.titleBadges[appId] || 0, root.notificationBadges[appId] || 0);
+    }
+
+    // badge key of the Dock item that owns the focused window
+    function _activeKey() {
+        const id = ToplevelManager.activeToplevel?.appId;
+        const item = id ? root.dockItems.find(it => it.appIds.includes(id)) : undefined;
+        return item ? item.appIds[0] : "";
     }
 
     function pinApp(app) {
@@ -210,6 +236,7 @@ Singleton {
         root.saveDock();
         // Remove from running apps if present
         root.runningApps = root.runningApps.filter(r => r.appIds[0] !== app.appIds[0]);
+        Qt.callLater(root.refresh);
     }
 
     function unpinApp(app) {
@@ -234,48 +261,6 @@ Singleton {
         arr.splice(toIndex, 0, item);
         root.pinned = arr;
         root.saveDock();
-    }
-
-    function _scanBadges() {
-        if (_badgeProc.running) return;
-        _badgeProc.running = true;
-    }
-
-    function _onBadgeScanFinished(text) {
-        const newBadges = {};
-        const lines = text.trim().split("\n");
-        for (const line of lines) {
-            const parts = line.split("|");
-            if (parts.length < 2) continue;
-            const windowClass = parts[0].trim().toLowerCase();
-            const count = parseInt(parts[1]);
-            if (!windowClass || isNaN(count) || count <= 0) continue;
-
-            // Match against pinned apps
-            for (const p of root.pinned) {
-                const pName = p.name.toLowerCase();
-                const exec = (p.exec || "").toLowerCase();
-                const desktop = (p.desktop || "").toLowerCase();
-                if (windowClass.includes(pName) || pName.includes(windowClass) ||
-                    windowClass.includes(exec) || exec.includes(windowClass) ||
-                    windowClass.includes(desktop) || desktop.includes(windowClass)) {
-                    newBadges[p.appIds[0]] = count;
-                    break;
-                }
-            }
-
-            // Match against running apps
-            for (const r of root.runningApps) {
-                const rName = r.name.toLowerCase();
-                const rExec = (r.exec || "").toLowerCase();
-                if (windowClass.includes(rName) || rName.includes(windowClass) ||
-                    windowClass.includes(rExec) || rExec.includes(windowClass)) {
-                    newBadges[r.appIds[0]] = count;
-                    break;
-                }
-            }
-        }
-        root.badgeCounts = newBadges;
     }
 
     function pinnedIcon(appId) {
@@ -402,6 +387,7 @@ Singleton {
     function _requestIcon(id) {
         if (root._iconBusy) return;
         root._iconBusy = true;
+        root._iconId = id;
         const cmd = root.iconScript + " '" + id.replace(/'/g, "'\\''") + "'";
         root._iconProc = Qt.createQmlObject(`
             import Quickshell.Io
@@ -425,14 +411,8 @@ Singleton {
         root._iconBusy = false;
         const path = text.trim();
         if (path) {
-            for (const item of root.runningApps) {
-                const it = item.appIds[0];
-                if (root._iconCache[it] === null && path) {
-                    root._iconCache[it] = "file://" + path;
-                    root.runningApps = root._buildExtras();
-                    break;
-                }
-            }
+            root._iconCache[id] = "file://" + path;
+            root.runningApps = root._buildExtras();
         } else {
             root._iconCache[id] = "";
         }
@@ -447,6 +427,12 @@ Singleton {
         repeat: false
         onTriggered: {
             if (root._iconBusy) {
+                // give up on this id, otherwise it is picked again forever
+                root._iconCache[root._iconId] = "";
+                if (root._iconProc) {
+                    root._iconProc.destroy();
+                    root._iconProc = null;
+                }
                 root._iconBusy = false;
                 root._resolveIcons();
             }
@@ -468,13 +454,13 @@ Singleton {
         return extras;
     }
 
+    // changes whenever a window opens, closes or changes its app id
+    readonly property string runningKey: root.allRunningIds().join("|")
+    onRunningKeyChanged: Qt.callLater(root.refresh)
+    onPinnedChanged: Qt.callLater(root.refresh)
+
     function refresh() {
-        const ids = [];
-        for (const t of ToplevelManager.toplevels.values) {
-            const id = root._normalizeId(t);
-            if (id && !ids.includes(id)) ids.push(id);
-        }
-        root._running = ids;
+        root._running = root.allRunningIds();
 
         const extras = root._buildExtras();
 
@@ -483,30 +469,6 @@ Singleton {
             root._signature = sig;
             root.runningApps = extras;
             root._resolveIcons();
-        }
-    }
-
-    Timer {
-        interval: 1000
-        running: true
-        repeat: true
-        onTriggered: root.refresh()
-    }
-
-    Timer {
-        id: _badgeTimer
-        interval: 2000
-        running: true
-        repeat: true
-        onTriggered: root._scanBadges()
-    }
-
-    Process {
-        id: _badgeProc
-        running: false
-        command: ["bash", root.badgeScript]
-        stdout: StdioCollector {
-            onStreamFinished: root._onBadgeScanFinished(text)
         }
     }
 
@@ -533,10 +495,6 @@ Singleton {
                 console.log("ICON_DARK_SET " + Object.keys(m).length);
             }
         }
-    }
-
-    function checkTrash() {
-        _trashCheckProc.running = true;
     }
 
     // Bake tinted artwork into assets/icons/tinted/<colour>/ with Python
@@ -619,60 +577,21 @@ Singleton {
         function onEffectiveIconStyleChanged() { root._scheduleTint(); }
     }
 
-    Process {
-        id: _trashCheckProc
-        running: false
-        command: ["bash", "-c", "ls -1 ~/.local/share/Trash/files/ 2>/dev/null | head -1"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                root.trashEmpty = text.trim().length === 0;
-            }
-        }
-    }
-
-    Timer {
-        id: _trashTimer
-        interval: 3000
-        running: true
-        repeat: true
-        onTriggered: root.checkTrash()
-    }
-
     Connections {
         target: Notifications
         function onNotify(n) {
-            var appName = (n.appName || "").toLowerCase();
-            if (appName.length === 0) return;
-
-            // Check pinned apps
-            for (const p of root.pinned) {
-                var pName = p.name.toLowerCase();
-                var exec = (p.exec || "").toLowerCase();
-                var desktop = (p.desktop || "").toLowerCase();
-                if (appName.includes(pName) || pName.includes(appName) ||
-                    appName.includes(exec) || exec.includes(appName) ||
-                    appName.includes(desktop) || desktop.includes(appName)) {
-                    root.incrementBadge(p.appIds[0]);
-                    return;
-                }
-            }
-
-            // Check running (non-pinned) apps
-            for (const r of root.runningApps) {
-                var rName = r.name.toLowerCase();
-                var rExec = (r.exec || "").toLowerCase();
-                if (appName.includes(rName) || rName.includes(appName) ||
-                    appName.includes(rExec) || rExec.includes(appName)) {
-                    root.incrementBadge(r.appIds[0]);
-                    return;
-                }
-            }
+            const key = root._badgeKey(n.appName);
+            if (key && key !== root._activeKey()) root.incrementBadge(key);
         }
+    }
+
+    Connections {
+        target: ToplevelManager
+        function onActiveToplevelChanged() { root.clearBadge(root._activeKey()); }
     }
 
     Component.onCompleted: {
         root.refresh();
-        root._scanBadges();
         root._scheduleTint();
     }
 }
