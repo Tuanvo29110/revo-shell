@@ -35,12 +35,6 @@ PanelWindow {
     }
 
     Process {
-        id: trashOpener
-        command: ["/home/revo/.local/bin/nautilus", "trash:///"]
-        running: false
-    }
-
-    Process {
         id: minRestoreProc
         running: false
         stdout: StdioCollector {}
@@ -846,8 +840,7 @@ PanelWindow {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        dlOpener.command = ["/home/revo/.local/bin/nautilus", "--new-window", "file:///home/revo/Downloads"];
-                        dlOpener.running = true;
+                        Quickshell.execDetached(["sh", "-c", "nautilus --new-window \"$HOME/Downloads\" || xdg-open \"$HOME/Downloads\""]);
                         root.downloadsOpen = false;
                     }
                 }
@@ -1703,7 +1696,7 @@ PanelWindow {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        if (!trashOpener.running) trashOpener.running = true;
+                        Quickshell.execDetached(["sh", "-c", "nautilus trash:/// || gio open trash:///"]);
                     }
                 }
             } // إغلاق حاوية الـ Item لسلة المهملات
