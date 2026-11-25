@@ -158,15 +158,25 @@ PanelWindow {
         else root.openMenu = name;
     }
 
+    function isTerminalId(al) {
+        return al.includes("kitty") || al.includes("alacritty") || al.includes("foot") || al.includes("wezterm") || al.includes("ghostty") || al.includes("terminal") || al.includes("konsole") || al.includes("opencode");
+    }
+
+    // Menus are written macOS-style: "logo" stands for ⌘. Apps expect Ctrl there
+    // (Super belongs to Hyprland's binds), and terminals expect Ctrl+Shift.
     function sendCombo(mods, key) {
         root.closeAllMenus();
         const tl = ToplevelManager.activeToplevel;
         if (tl && typeof tl.activate === "function") tl.activate();
+        const mapped = mods.map(m => m === "logo" ? "ctrl" : m);
+        if (mods.includes("logo") && root.isTerminalId((tl?.appId ?? "").toLowerCase())) mapped.push("shift");
+        const held = mapped.filter((m, i) => mapped.indexOf(m) === i);
         let cmd = "sleep 0.08; wtype";
-        for (const m of mods) cmd += " -M " + m;
+        for (const m of held) cmd += " -M " + m;
         cmd += " -k " + key;
-        for (const m of mods) cmd += " -m " + m;
-        root.run(cmd);
+        for (const m of held) cmd += " -m " + m;
+        // run() detaches only the first command, so keep the delay and wtype together
+        root.run("sh -c '" + cmd + "'");
     }
 
     function openPath(p) {
@@ -183,7 +193,7 @@ PanelWindow {
         // Detect app type
         const isFinder = al.includes("finder");
         const isBrowser = al.includes("firefox") || al.includes("chrome") || al.includes("chromium") || al.includes("brave") || al.includes("vivaldi") || al.includes("safari") || al.includes("epiphany") || al.includes("waterfox");
-        const isTerminal = al.includes("kitty") || al.includes("alacritty") || al.includes("foot") || al.includes("wezterm") || al.includes("ghostty") || al.includes("terminal") || al.includes("konsole") || al.includes("opencode");
+        const isTerminal = root.isTerminalId(al);
         const isEditor = al.includes("code") || al.includes("vim") || al.includes("emacs") || al.includes("nano") || al.includes("gedit") || al.includes("kate") || al.includes("sublime") || al.includes("notepadqq") || al.includes("opencode");
         const isFiles = al.includes("nautilus") || al.includes("thunar") || al.includes("dolphin") || al.includes("pcmanfm") || al.includes("nemo") || al.includes("files");
         const isMedia = al.includes("vlc") || al.includes("mpv") || al.includes("celluloid") || al.includes("totem") || al.includes("rhythmbox") || al.includes("audacious");
@@ -206,7 +216,7 @@ PanelWindow {
                     { label: "Compress", onClick: () => root.sendCombo(["logo", "alt"], "c") },
                     { sep: true },
                     { label: "Duplicate", sub: "\u2318D", onClick: () => root.sendCombo(["logo"], "d") },
-                    { label: "Make Alias", sub: "\u2318M", onClick: () => root.sendCombo(["logo", "m"]) },
+                    { label: "Make Alias", sub: "\u2318M", onClick: () => root.sendCombo(["logo"], "m") },
                     { label: "Quick Look", sub: "Space", onClick: () => root.sendCombo([], "space") },
                     { label: "Print\u2026", sub: "\u2318P", onClick: () => root.sendCombo(["logo"], "p") },
                     { sep: true },
@@ -223,7 +233,7 @@ PanelWindow {
                     { label: "Open Location\u2026", sub: "\u2318L", onClick: () => root.sendCombo(["logo"], "l") },
                     { label: "Open Recent\u2026", sub: "", onClick: () => {} },
                     { sep: true },
-                    { label: "Close Tab", sub: "\u2318W", onClick: () => root.sendCombo(["logo", "shift"], "w") },
+                    { label: "Close Tab", sub: "\u2318W", onClick: () => root.sendCombo(["logo"], "w") },
                     { label: "Close Window", sub: "\u21e7\u2318W", onClick: () => root.sendCombo(["logo", "shift"], "w") },
                     { sep: true },
                     { label: "Save Page As\u2026", sub: "\u21e7\u2318S", onClick: () => root.sendCombo(["logo", "shift"], "s") },
