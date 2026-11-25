@@ -387,21 +387,6 @@ Scope {
         ControlCenter {
           id: controlCenter
           screen: panelWindow.screen
-          onOpenedChanged: {
-            if (opened) {
-              ccBluetoothSingle.opened = false;
-            }
-          }
-        }
-
-        CCBluetoothSingle {
-          id: ccBluetoothSingle
-          screen: panelWindow.screen
-          onOpenedChanged: {
-            if (opened) {
-              controlCenter.opened = false;
-            }
-          }
         }
 
         RowLayout {
@@ -421,6 +406,8 @@ Scope {
               required property int index
               required property var modelData
 
+              // saved layouts may name modules that no longer exist: take no space
+              visible: itemLoader.item !== null
               Layout.minimumWidth: 50
               implicitWidth: itemLoader.implicitWidth
 
@@ -471,7 +458,6 @@ Scope {
                       case "systemTray": return systemTrayComponent
                       case "battery": return batteryComponent
                       case "wifi": return wifiComponent
-                      case "bluetooth": return bluetoothComponent
                       case "search": return searchComponent
                       case "controlCenter": return controlCenterComponent
                       case "clock": return clockComponent
@@ -491,21 +477,6 @@ Scope {
           Component { id: systemTrayComponent; SystemTray {} }
           Component { id: batteryComponent; Battery { iconSize: 25 } }
           Component { id: wifiComponent; UIBButton { Wifi { iconSize: 25 } } }
-          Component {
-            id: bluetoothComponent
-            UIBButton {
-              onClick: { ccBluetoothSingle.open(); controlCenter.opened = false; }
-              selected: ccBluetoothSingle.opened
-              VectorImage {
-                id: rBBluetooth
-                source: Qt.resolvedUrl(Quickshell.shellDir + "/media/icons/bluetooth-clear.svg")
-                width: 25 * 1.2
-                height: 25 * 1.2
-                preferredRendererType: VectorImage.CurveRenderer
-                anchors.centerIn: parent
-              }
-            }
-          }
           Component {
             id: searchComponent
             UIBButton {

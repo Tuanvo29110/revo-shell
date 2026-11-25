@@ -23,7 +23,6 @@ Column {
         recentDocs: "bar.recentDocs",
         spotlight: "menubarSpotlight",
         wifi: "menubarWifi",
-        bluetooth: "menubarBluetooth",
         battery: "menubarBattery",
         focus: "menubar.focus",
         mirror: "menubar.mirror",
@@ -65,7 +64,6 @@ Column {
         if (name === "autoHide")
             Shell.eset("bar.autohideMode", value)
         if (name === "wifi") Shell.uset("menubar.wifi", value)
-        if (name === "bluetooth") Shell.uset("menubar.bluetooth", value)
         if (name === "battery") Shell.uset("menubar.battery", value)
         if (name === "sound") Shell.uset("menubar.sound", value)
         if (name === "spotlight") Shell.uset("menubar.spotlight", value)
@@ -76,7 +74,7 @@ Column {
 
     // "Reset Control Center…": restore every menu bar item to its default
     function resetControls() {
-        var defs = { spotlight: true, wifi: true, bluetooth: true, battery: true, sound: true,
+        var defs = { spotlight: true, wifi: true, battery: true, sound: true,
                      display: true, nowPlaying: true, focus: true, mirror: true, clock: true,
                      tray: true, controlCenter: true, timeMachine: false, weather: false }
         for (var k in defs)
@@ -100,7 +98,6 @@ Column {
         property string recentDocs: String(page.g("recentDocs", "10"))
         property bool spotlight: page.g("spotlight", true) === true
         property bool wifi: page.g("wifi", true) === true
-        property bool bluetooth: page.g("bluetooth", true) === true
         property bool battery: page.g("battery", true) === true
         property bool focus: page.g("focus", true) === true
         property string focusShow: String(page.eg("focusShow", "Show When Active"))
@@ -210,14 +207,6 @@ Column {
             showSwitch: true
             switchOn: mb.wifi
             onToggled: page.set("wifi", checked)
-        }
-        MenuControlRow {
-            separator: true
-            iconFile: "sb_bluetooth"
-            title: "Bluetooth"
-            showSwitch: true
-            switchOn: mb.bluetooth
-            onToggled: page.set("bluetooth", checked)
         }
         MenuControlRow {
             separator: true

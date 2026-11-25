@@ -35,7 +35,6 @@
   "liquidGlassIntensity": 0,
   "menubar": {
     "battery": true,
-    "bluetooth": true,
     "clock": true,
     "controlcenter": true,
     "display": true,
@@ -49,7 +48,6 @@
     "wifi": true
   },
   "menubarBattery": true,
-  "menubarBluetooth": true,
   "menubarClock": true,
   "menubarDisplay": true,
   "menubarSpotlight": true,

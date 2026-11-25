@@ -12,7 +12,6 @@ Singleton {
     property bool wifiConnected: false
     property string wifiSsid: ""
     property bool ethernetConnected: false
-    property bool bluetoothOn: false
     property var wifiNetworks: []   // list of SSID strings
 
     function poll() {
@@ -20,7 +19,6 @@ Singleton {
         _deviceStatus.running = true;
         _wifiList.running = true;
         _wifiScan.running = true;
-        _bluetoothShow.running = true;
     }
 
     function connectSsid(ssid) {
@@ -33,13 +31,6 @@ Singleton {
         _toggleWifi.command = ["nmcli", "radio", "wifi", on ? "on" : "off"];
         _toggleWifi.running = true;
         root.wifiOn = on;
-    }
-
-    function toggleBluetooth() {
-        const on = !root.bluetoothOn;
-        _toggleBt.command = ["bash", "-c", "timeout 5 bluetoothctl power " + (on ? "on" : "off")];
-        _toggleBt.running = true;
-        root.bluetoothOn = on;
     }
 
     Process {
@@ -117,23 +108,7 @@ Singleton {
     }
 
     Process {
-        id: _bluetoothShow
-        running: false
-        command: ["bash", "-c", "timeout 5 bluetoothctl show"]
-        stdout: StdioCollector {
-            onStreamFinished: root.bluetoothOn = /Powered: yes/.test(text)
-        }
-    }
-
-    Process {
         id: _toggleWifi
-        running: false
-        stdout: StdioCollector {}
-        stderr: StdioCollector {}
-    }
-
-    Process {
-        id: _toggleBt
         running: false
         stdout: StdioCollector {}
         stderr: StdioCollector {}

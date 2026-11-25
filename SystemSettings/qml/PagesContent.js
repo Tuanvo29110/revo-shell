@@ -387,7 +387,7 @@ var content = {
         { note: "Audio descriptions describe visual content in supported videos." }
     ],
     "acc.hearingDevices": [
-        { rows: [ { t: "Bluetooth", v: "Searching…" }, { t: "MFi Hearing Devices", dim: true } ] },
+        { rows: [ { t: "MFi Hearing Devices", dim: true } ] },
         { note: "Hearing devices paired with your Mac appear here." }
     ],
     "acc.hearingAudio": [
@@ -447,7 +447,6 @@ var content = {
     "privacy.calendars": [ { rows: [ { t: "Safari", sw: true, on: true }, { t: "Reminders", sw: true, on: true } ] } ],
     "privacy.reminders": [ { rows: [ { t: "Safari", sw: false, on: false } ] } ],
     "privacy.photos": [ { rows: [ { t: "Preview", sw: true, on: true }, { t: "Safari", sw: false, on: false } ] } ],
-    "privacy.bluetooth": [ { rows: [ { t: "Bluetooth Apps", dim: true }, { t: "System Settings", sw: true, on: true } ] } ],
     "privacy.microphone": [ { rows: [ { t: "FaceTime", sw: true, on: true }, { t: "Zoom", sw: false, on: false } ] } ],
     "privacy.camera": [ { rows: [ { t: "FaceTime", sw: true, on: true }, { t: "Photo Booth", sw: false, on: false } ] } ],
     "privacy.screenRecording": [ { rows: [ { t: "Screenshot", sw: true, on: true }, { t: "Zoom", sw: false, on: false } ], note: "Apps with screen recording access can record your screen and audio." } ],
@@ -824,21 +823,6 @@ content["wifi"] = [
     { note: "Wi-Fi lets you connect to the internet and local network." }
 ]
 
-content["bluetooth"] = [
-    { rows: [
-        { t: "Bluetooth", sw: true, on: true },
-        { t: "Now discoverable as \"Mac Pro\"", dim: true }
-    ] },
-    { header: "My Devices", rows: [
-        { t: "AirPods Pro", s: "Connected", v: "100%" },
-        { t: "Magic Mouse", s: "Connected", v: "84%" },
-        { t: "Keychron K3", s: "Not Connected" }
-    ] },
-    { header: "Nearby Devices", rows: [
-        { t: "Searching…", dim: true }
-    ] }
-]
-
 content["network"] = [
     { rows: [
         { t: "Wi-Fi", s: "Home_5G", to: "wifi.details", c: true },
@@ -846,7 +830,6 @@ content["network"] = [
         { t: "VPN", s: "Off", to: "network.vpn", c: true }
     ] },
     { header: "Other Services", rows: [
-        { t: "Bluetooth PAN", s: "Off", c: true },
         { t: "Thunderbolt Bridge", s: "Not Connected", c: true }
     ] },
     { header: "Options", rows: [
@@ -1114,7 +1097,6 @@ content["privacySecurity"] = [
         { t: "Calendars", to: "privacy.calendars" },
         { t: "Reminders", to: "privacy.reminders" },
         { t: "Photos", to: "privacy.photos" },
-        { t: "Bluetooth", to: "privacy.bluetooth" },
         { t: "Microphone", to: "privacy.microphone" },
         { t: "Camera", to: "privacy.camera" },
         { t: "Screen & System Audio Recording", to: "privacy.screenRecording" },

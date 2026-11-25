@@ -239,10 +239,6 @@ Column {
         anchors.right: parent.right
         anchors.rightMargin: Theme.cardMargin
         spacing: 10
-        MacButton {
-            text: "Set Up Bluetooth Trackpad…"
-            onClicked: page.navigate("bluetooth")
-        }
         HelpCircle { anchors.verticalCenter: parent.verticalCenter }
     }
 

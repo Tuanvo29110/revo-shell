@@ -67,7 +67,7 @@ Window {
         "icon_SystemSettings1024x1024_NSAppearanceName_0109_30_512.png"
     ]
     function iconFor(id) {
-        var aa = { appleid:1, family:1, wifi:1, bluetooth:1, network:1, vpn:1, general:1,
+        var aa = { appleid:1, family:1, wifi:1, network:1, vpn:1, general:1,
                    notifications:1, sound:1, lockscreen:1, privacy:1, touchid:1, users:1,
                    internet:1, gamecenter:1, icloud:1, wallet:1, passwords:1, keyboard:1,
                    spotlight:1, appearance:1, lockdown:1, energy:1 }
@@ -79,7 +79,7 @@ Window {
     // ---- sidebar model (real macOS grouping) ----
     readonly property var groups: [
         { items:[ {id:"appleid", label:"Apple ID", special:true}, {id:"family", label:"Family"} ]},
-        { items:[ {id:"wifi", label:"Wi‑Fi"}, {id:"bluetooth", label:"Bluetooth"}, {id:"network", label:"Network"}, {id:"vpn", label:"VPN"} ]},
+        { items:[ {id:"wifi", label:"Wi‑Fi"}, {id:"network", label:"Network"}, {id:"vpn", label:"VPN"} ]},
         { items:[ {id:"general", label:"General"} ]},
         { items:[ {id:"notifications", label:"Notifications"}, {id:"sound", label:"Sound"}, {id:"focus", label:"Focus"}, {id:"screentime", label:"Screen Time"} ]},
         { items:[ {id:"lockscreen", label:"Lock Screen"}, {id:"privacy", label:"Privacy & Security"}, {id:"touchid", label:"Touch ID & Password"}, {id:"users", label:"Users & Groups"} ]},
@@ -89,7 +89,7 @@ Window {
         { items:[ {id:"lockdown", label:"Lockdown Mode"}, {id:"energy", label:"Energy"}, {id:"softwareupdate", label:"Software Update"} ]}
     ]
     property string current: "dock"
-    readonly property var masters: ({ wifi:"wifiPower", bluetooth:"btPower" })
+    readonly property var masters: ({ wifi:"wifiPower" })
 
     function titleFor(id) {
         for (var g = 0; g < groups.length; g++)
@@ -119,7 +119,6 @@ Window {
         ]} ],
         menubar: [ { title:"", rows:[
             { kind:"toggle", key:"menubar.wifi", label:"Wi‑Fi" },
-            { kind:"toggle", key:"menubar.bluetooth", label:"Bluetooth" },
             { kind:"toggle", key:"menubar.battery", label:"Battery" },
             { kind:"toggle", key:"menubar.sound", label:"Sound" },
             { kind:"toggle", key:"menubar.controlcenter", label:"Control Center" },
@@ -137,12 +136,6 @@ Window {
             { kind:"nav", label:"Other Network…", value:"" },
             { kind:"nav", label:"Join Other Network…", value:"" },
             { kind:"nav", label:"Ask to Join Hotspots", value:"Ask" }
-        ]} ],
-        bluetooth: [ { title:"", rows:[
-            { kind:"nav", label:"My Devices", value:"" },
-            { kind:"nav", label:"Magic Keyboard", value:"Connected" },
-            { kind:"nav", label:"Magic Mouse", value:"Connected" },
-            { kind:"nav", label:"Magic Trackpad", value:"Not Connected" }
         ]} ],
         network: [ { title:"", rows:[
             { kind:"nav", label:"Wi‑Fi", value:"Connected" },
@@ -229,7 +222,6 @@ Window {
         printers: [ { title:"", rows:[ { kind:"nav", label:"Add Printer, Scanner, or Fax", value:"" }, { kind:"nav", label:"Default Printer", value:"Last Printer Used" }, { kind:"nav", label:"Default Paper Size", value:"A4" } ]} ],
         controlcenter: [ { title:"", rows:[
             { kind:"toggle", key:"ccWifi", label:"Wi‑Fi" },
-            { kind:"toggle", key:"ccBt", label:"Bluetooth" },
             { kind:"toggle", key:"ccAirDrop", label:"AirDrop" },
             { kind:"toggle", key:"ccBattery", label:"Battery" },
             { kind:"toggle", key:"ccMirror", label:"Screen Mirroring" },

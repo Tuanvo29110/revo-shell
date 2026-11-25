@@ -1,1 +1,0 @@
-../../../../eqsh/ui/components/panel/CCBluetooth.qml

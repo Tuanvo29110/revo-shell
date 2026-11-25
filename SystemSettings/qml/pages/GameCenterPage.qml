@@ -153,7 +153,7 @@ Column {
             onToggled: (c) => page.us("gamecenter.nearby", c)
         }
     }
-    Note { text: "Allow nearby Game Center players in the same game to invite you to a multiplayer game over Wi-Fi or Bluetooth." }
+    Note { text: "Allow nearby Game Center players in the same game to invite you to a multiplayer game over Wi-Fi." }
 
     SectionHeader { text: "Connect with Friends" }
     GroupCard {

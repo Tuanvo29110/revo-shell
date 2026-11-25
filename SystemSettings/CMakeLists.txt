@@ -95,7 +95,6 @@ qt_add_qml_module(systemsettings
         qml/pages/MotionPage.qml
     qml/pages/DeviceDetailsPage.qml
     qml/pages/WifiPage.qml
-    qml/pages/BluetoothPage.qml
     qml/pages/NetworkPage.qml
     qml/pages/BatteryPage.qml
     qml/pages/IcloudPage.qml

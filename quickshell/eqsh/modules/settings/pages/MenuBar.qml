@@ -246,11 +246,6 @@ ScrollView {
                         icon: "search.svg",
                         id: "search"
                     }, {
-                        name: "Bluetooth",
-                        index: -1,
-                        icon: "bluetooth.svg",
-                        id: "bluetooth"
-                    }, {
                         name: "Control Center",
                         index: -1,
                         icon: "controlCenter.svg",

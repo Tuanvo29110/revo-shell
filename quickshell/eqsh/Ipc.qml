@@ -2,7 +2,6 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
-import Quickshell.Bluetooth
 import Quickshell.Services.Pipewire
 import Quickshell.Io
 import qs.services
@@ -161,9 +160,6 @@ Singleton {
         function close() {
             runMixin("eqdesktop.controlCenter", "close")
         }
-        function openBluetooth() {
-            runMixin("eqdesktop.controlCenter.bluetooth", "open")
-        }
         function openWifi() {
             runMixin("eqdesktop.controlCenter.wifi", "open")
         }
@@ -287,13 +283,6 @@ Singleton {
         description: "Toggle notch info panel"
         onPressed: {
             runMixin("eqdesktop.notch", "informInstance")
-        }
-    }
-    CustomShortcut {
-        name: "controlCenterBluetooth"
-        description: "Open Control Center Bluetooth Menu"
-        onPressed: {
-            runMixin("eqdesktop.controlCenter.bluetooth", "open")
         }
     }
     CustomShortcut {

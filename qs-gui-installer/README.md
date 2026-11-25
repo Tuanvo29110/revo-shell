@@ -33,7 +33,7 @@ Same work as root `./install.sh` (parallel implementations, neither calls the ot
 4. `git clone` monorepo → deploy `hypr/`, `quickshell/`, `wallpapers/`  
 5. Rewrite `/home/revo` → `$HOME`  
 6. Build CMake shells (`shell` + `imported-1789667132`)  
-7. Enable pipewire / NetworkManager / bluetooth  
+7. Enable pipewire / NetworkManager  
 8. Per-file backup — never blindly deletes existing configs  
 
 Repo URL (already set):

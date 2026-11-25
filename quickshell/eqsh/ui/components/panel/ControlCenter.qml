@@ -3,7 +3,6 @@ import QtQuick.VectorImage
 import QtQuick.Effects
 import QtQuick.Controls
 import Quickshell
-import Quickshell.Bluetooth
 import Quickshell.Widgets
 import Quickshell.Io
 import Quickshell.Services.Pipewire
@@ -21,7 +20,6 @@ import QtQuick.Controls.Fusion
 
 Scope {
     function open() {
-        root.bluetoothOpened = false;
         root.wifiOpened = false;
         panelWindow.opened = true;
     }
@@ -38,12 +36,10 @@ Scope {
 
     required property var screen
     property alias opened: panelWindow.opened
-    signal openBluetooth()
     signal openWifi()
     signal close()
-    property bool bluetoothOpened: false
     property bool wifiOpened: false
-    property bool windowOpened: bluetoothOpened || wifiOpened
+    property bool windowOpened: wifiOpened
     // ---- voice / call state (top pill) ----
     property bool inVoice: false
     property string voiceApp: ""
@@ -66,13 +62,13 @@ Scope {
             if (typeof ShellController !== "undefined") { ShellController.toggle("session"); return; }
         } catch (e) {}
     }
-    // ---- airplane mode (rfkill wifi+bluetooth) ----
+    // ---- airplane mode (rfkill wifi) ----
     property bool airplaneOn: false
     function toggleAirplane() {
         root.airplaneOn = !root.airplaneOn;
         _rfkill.command = ["bash", "-c", root.airplaneOn
-            ? "rfkill block wifi; rfkill block bluetooth"
-            : "rfkill unblock wifi; rfkill unblock bluetooth"];
+            ? "rfkill block wifi"
+            : "rfkill unblock wifi"];
         _rfkill.running = true;
     }
     function pollAirplane() { _rfkillQuery.running = true; }
@@ -133,11 +129,11 @@ Scope {
     Process {
         id: _rfkillQuery
         running: false
-        command: ["bash", "-c", "rfkill list 2>/dev/null | grep -A1 -E 'Wireless LAN|Bluetooth' | grep -c 'Soft blocked: yes' || echo 0"]
+        command: ["bash", "-c", "rfkill list 2>/dev/null | grep -A1 'Wireless LAN' | grep -c 'Soft blocked: yes' || echo 0"]
         stdout: StdioCollector {
             onStreamFinished: {
                 const n = parseInt(text.trim());
-                if (!isNaN(n)) root.airplaneOn = n >= 2;
+                if (!isNaN(n)) root.airplaneOn = n >= 1;
             }
         }
     }
@@ -173,10 +169,6 @@ Scope {
 
         onCleared: {
             root.close()
-            if (root.bluetoothOpened) {
-                root.bluetoothOpened = false;
-                return;
-            }
             if (root.wifiOpened) {
                 root.wifiOpened = false;
                 return;
@@ -203,7 +195,7 @@ Scope {
             id: boxbutton
             radius: 40
             property bool enabled: false
-            property bool hideCause: root.bluetoothOpened || root.wifiOpened
+            property bool hideCause: root.wifiOpened
             opacity: boxbutton.hideCause ? 0 : 1
             property bool scaleCause: false
             scale: boxbutton.scaleCause ? 1.25 : 1
@@ -246,10 +238,6 @@ Scope {
 
         onEscapePressed: () => {
             root.close()
-            if (root.bluetoothOpened) {
-                root.bluetoothOpened = false;
-                return;
-            }
             if (root.wifiOpened) {
                 root.wifiOpened = false;
                 return;
@@ -349,7 +337,7 @@ Scope {
                     Behavior on height { NumberAnimation { duration: root.animationDur; easing.type: Easing.OutBack; easing.overshoot: 0.5 } }
                     radius: root.wifiOpened ? 20 : 40
                     Behavior on radius { NumberAnimation { duration: root.animationDur } }
-                    hideCause: root.bluetoothOpened
+                    hideCause: false
 
                     scaleCause: root.wifiOpened
                     light: root.wifiOpened ? "transparent" : root.glassRimColor
@@ -484,152 +472,13 @@ Scope {
                         }
                     }
                 }
-                Button1x1 {
-                    id: bluetoothWidget
-                    xPos: 0
-                    yPos: 1
-                    overwriteX: root.bluetoothOpened
-                    overwriteY: root.bluetoothOpened
-                    overwriteXPos: 0
-                    overwriteYPos: -60
-                    hideCause: root.wifiOpened
-                    width: root.bluetoothOpened ? panelWindow.gridImplicitWidth : panelWindow.box*2+panelWindow.boxMargin
-                    height: root.bluetoothOpened ? 250 : panelWindow.box
-                    Behavior on width { NumberAnimation { duration: root.animationDur; easing.type: Easing.OutBack; easing.overshoot: 0.5 } }
-                    Behavior on height { NumberAnimation { duration: root.animationDur; easing.type: Easing.OutBack; easing.overshoot: 0.5 } }
-                    radius: root.bluetoothOpened ? 20 : 40
-                    Behavior on radius { NumberAnimation { duration: root.animationDur } }
-                    enabled: Bluetooth.defaultAdapter?.enabled || false
-                    Connections {
-                        target: root
-                        function onClose() {
-                            if (root.bluetoothOpened) {
-                                bluetoothWidget.scale = 1
-                            }
-                        }
-                    }
-                    ClippingRectangle {
-                        id: btClipping
-                        anchors {
-                            left: parent.left
-                            leftMargin: 15
-                            verticalCenter: parent.verticalCenter
-                        }
-                        radius: 40
-                        width: 40
-                        height: 40
-                        color: Bluetooth.defaultAdapter?.enabled ? "#fff" : "transparent"
-                        opacity: root.bluetoothOpened ? 0 : 1
-                        Behavior on opacity { NumberAnimation { duration: root.animationDur } }
-                        VectorImage {
-                            id: rBBluetooth
-                            source: Qt.resolvedUrl(Quickshell.shellDir + "/media/icons/bluetooth-clear.svg")
-                            width: 24
-                            height: 24
-                            preferredRendererType: VectorImage.CurveRenderer
-                            anchors.centerIn: parent
-                            layer.enabled: true
-                            layer.effect: MultiEffect {
-                                colorization: 1
-                                colorizationColor: Bluetooth.defaultAdapter?.enabled ? "#2495ff" : "#fff"
-                            }
-                        }
-                    }
-                    UIText {
-                        text: Translation.tr("Bluetooth")
-                        font.weight: 700
-                        anchors {
-                            left: btClipping.right
-                            leftMargin: 5
-                            top: btClipping.top
-                        }
-                        opacity: root.bluetoothOpened ? 0 : 1
-                        Behavior on opacity { NumberAnimation { duration: root.animationDur } }
-                    }
-                    UIText {
-                        text: Bluetooth.defaultAdapter?.enabled ? Translation.tr("On") : Translation.tr("Off")
-                        elide: Text.ElideRight
-                        gray: false
-                        font.weight: 500
-                        height: 20
-                        width: panelWindow.box+10
-                        anchors {
-                            left: btClipping.right
-                            leftMargin: 5
-                            bottom: btClipping.bottom
-                        }
-                        opacity: root.bluetoothOpened ? 0 : 1
-                        Behavior on opacity { NumberAnimation { duration: root.animationDur } }
-                    }
-                    MouseArea {
-                        anchors.fill: parent
-                        enabled: !root.windowOpened || root.bluetoothOpened
-                        onClicked: {
-                            root.bluetoothOpened = !root.bluetoothOpened
-                            if (root.bluetoothOpened) {
-                                bluetoothWidget.scale = 1.25
-                            } else {
-                                bluetoothWidget.scale = 1
-                            }
-                        }
-                        onPressed: {
-                            if (root.bluetoothOpened) return;
-                            bluetoothWidget.scale = 0.9
-                        }
-                        onReleased: {
-                            bluetoothWidget.scale = 1.25
-                        }
-                        pressAndHoldInterval: 300
-                        onPressAndHold: {
-                            root.bluetoothOpened = true;
-                            bluetoothWidget.scale = 1.25
-                        }
-                    }
-                    scaleCause: root.bluetoothOpened
-                    light: root.bluetoothOpened ? "transparent" : root.glassRimColor
-                    color: root.bluetoothOpened ? "transparent" : root.glassColor
-                    Behavior on color { ColorAnimation { duration: root.animationDur } }
-                    ClippingRectangle {
-                        id: clippingRectBluetooth
-                        anchors.fill: parent
-                        color: "transparent"
-                        radius: root.bluetoothOpened ? 20 : 40
-                        implicitHeight: root.bluetoothOpened ? bluetoothWidget.height : 0
-                        implicitWidth: root.bluetoothOpened ? bluetoothWidget.width : 0
-                        Behavior on radius { NumberAnimation { duration: root.animationDur } }
-                        z: 100
-                        layer.enabled: true
-                        layer.samples: 4
-                        opacity: root.bluetoothOpened ? 1 : 0
-                        Behavior on opacity { NumberAnimation { duration: root.animationDur } }
-                        BoxGlass {
-                            anchors.fill: parent
-                            radius: root.bluetoothOpened ? 20 : 40
-                            Behavior on radius { NumberAnimation { duration: root.animationDur } }
-                            color: root.glassColor
-                            light: root.glassRimColor
-                            rimStrength: root.glassRimStrengthStrong
-                            lightDir: root.glassLightDirStrong
-                            CCBluetooth {
-                                width: panelWindow.gridImplicitWidth
-                                height: 250
-                                glassColor: root.glassColor
-                                glassRimColor: root.glassRimColor
-                                glassRimStrength: root.glassRimStrength
-                                glassRimStrengthStrong: root.glassRimStrengthStrong
-                                glassLightDirStrong: root.glassLightDirStrong
-                                textColor: root.textColor
-                            }
-                        }
-                    }
-                }
                 BoxButton {
                     id: airplaneWidget
                     width: panelWindow.box*2+panelWindow.boxMargin
                     height: panelWindow.box
                     radius: 40
                     xPos: 0
-                    yPos: 2
+                    yPos: 1
                     enabled: false
                     MouseArea {
                         anchors.fill: parent
@@ -732,7 +581,7 @@ Scope {
                 Button1x1 {
                     id: mirrorWidget
                     xPos: 0
-                    yPos: 3
+                    yPos: 2
                     enabled: root.mirroring
                     MouseArea {
                         anchors.fill: parent
@@ -755,7 +604,7 @@ Scope {
                 Button1x1 {
                     id: powerWidget
                     xPos: 1
-                    yPos: 3
+                    yPos: 2
                     enabled: false
                     MouseArea {
                         anchors.fill: parent
@@ -777,10 +626,10 @@ Scope {
                 }
                 BoxButton {
                     id: focusWidget
-                    width: panelWindow.box*2+panelWindow.boxMargin
+                    width: panelWindow.box*4+panelWindow.boxMargin*3
                     height: panelWindow.box
                     radius: 40
-                    xPos: 2
+                    xPos: 0
                     yPos: 3
                     Loader {
                         anchors.fill: parent

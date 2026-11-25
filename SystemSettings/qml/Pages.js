@@ -1,7 +1,7 @@
 .pragma library
 
 // Root pages (sidebar destinations)
-var roots = ["appleId", "wifi", "bluetooth", "network", "battery", "energy",
+var roots = ["appleId", "wifi", "network", "battery", "energy",
     "general", "accessibility", "appearance", "menuBar", "desktopDock",
     "displays", "spotlight", "wallpaper", "notifications", "sound", "focus",
     "screenTime", "lockScreen", "privacySecurity", "touchIDPassword",
@@ -11,7 +11,6 @@ var roots = ["appleId", "wifi", "bluetooth", "network", "battery", "energy",
 var info = {
     appleId: { title: "Sign in", icon: "sb_signin", root: true },
     wifi: { title: "Wi-Fi", icon: "sb_wifi", root: true },
-    bluetooth: { title: "Bluetooth", icon: "sb_bluetooth", root: true },
     network: { title: "Network", icon: "sb_local-network", root: true },
     battery: { title: "Battery", icon: "sb_battery", root: true },
     energy: { title: "Energy", icon: "sb_energy", root: true },
@@ -90,7 +89,6 @@ var info = {
     "privacy.calendars": { title: "Calendars" },
     "privacy.reminders": { title: "Reminders" },
     "privacy.photos": { title: "Photos" },
-    "privacy.bluetooth": { title: "Bluetooth" },
     "privacy.microphone": { title: "Microphone" },
     "privacy.camera": { title: "Camera" },
     "privacy.screenRecording": { title: "Screen & System Audio Recording" },
@@ -141,7 +139,6 @@ var files = {
     "acc.motion": "pages/MotionPage.qml",
     "acct.deviceDetails": "pages/DeviceDetailsPage.qml",
     wifi: "pages/WifiPage.qml",
-    bluetooth: "pages/BluetoothPage.qml",
     network: "pages/NetworkPage.qml",
     battery: "pages/BatteryPage.qml",
     "battery.health": "pages/BatteryPage.qml",

@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.VectorImage
 import QtQuick.Effects
 import Quickshell
-import Quickshell.Bluetooth
 import Quickshell.Widgets
 import QtQuick.Layouts
 import Quickshell.Wayland

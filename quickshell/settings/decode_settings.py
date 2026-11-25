@@ -7,7 +7,7 @@ BLK = "/home/revo/.config/quickshell/settings/assets/car_blocks"
 OUT = "/home/revo/.config/quickshell/settings/assets/icons"
 os.makedirs(OUT, exist_ok=True)
 
-TOK = re.compile(r'(WiFi|Wi-?Fi|Bluetooth|Network|VPN|Battery|General|Notif|Sound|Focus|ScreenTime|Lock|Privacy|Touch|User|Internet|Game|iCloud|Wallet|Passw|Keyboard|Mouse|Trackpad|Printer|Family|Apple|Display|Wallpaper|Dock|Appear|Access|Update|Storage|Language|Sharing|TimeMachine|Startup|Profile|AirDrop|Spotlight|VPN|Display|Wallpaper)', re.I)
+TOK = re.compile(r'(WiFi|Wi-?Fi|Network|VPN|Battery|General|Notif|Sound|Focus|ScreenTime|Lock|Privacy|Touch|User|Internet|Game|iCloud|Wallet|Passw|Keyboard|Mouse|Trackpad|Printer|Family|Apple|Display|Wallpaper|Dock|Appear|Access|Update|Storage|Language|Sharing|TimeMachine|Startup|Profile|AirDrop|Spotlight|VPN|Display|Wallpaper)', re.I)
 
 def carve(buf):
     res = []

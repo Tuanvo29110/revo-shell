@@ -149,8 +149,8 @@ class InstallerConfig:
         # audio
         "pipewire", "pipewire-pulse", "wireplumber", "libpulse",
         "playerctl", "cava", "mpv-mpris",
-        # network / bt / power / sensors
-        "networkmanager", "bluez", "bluez-utils", "brightnessctl",
+        # network / power / sensors
+        "networkmanager", "brightnessctl",
         "upower", "power-profiles-daemon", "lm_sensors", "ddcutil",
         # capture / clipboard
         "grim", "slurp", "wf-recorder", "hyprshot", "hyprpicker",
@@ -613,7 +613,7 @@ class InstallationWorker(QObject):
                     "pkg-config", "git", "curl", "jq", "python3", "python3-pip",
                     "libnotify-bin", "xdg-utils", "grim", "slurp", "wf-recorder",
                     "ffmpeg", "imagemagick", "wl-clipboard", "playerctl",
-                    "pipewire", "wireplumber", "network-manager", "bluez",
+                    "pipewire", "wireplumber", "network-manager",
                     "brightnessctl", "fonts-jetbrains-mono", "papirus-icon-theme",
                     "rofi", "kitty", "fish", "fastfetch",
                 ]
@@ -632,7 +632,7 @@ class InstallationWorker(QObject):
                     "hyprland", "cmake", "ninja-build", "git", "curl", "jq",
                     "python3", "python3-pip", "libnotify", "xdg-utils",
                     "grim", "slurp", "ffmpeg", "wl-clipboard", "playerctl",
-                    "pipewire", "wireplumber", "NetworkManager", "bluez",
+                    "pipewire", "wireplumber", "NetworkManager",
                     "brightnessctl", "kitty", "fish",
                 ]
                 r = self._sudo_run(
@@ -1455,7 +1455,7 @@ class InstallationWorker(QObject):
                 )
             except Exception:
                 pass
-        system_units = ["NetworkManager.service", "bluetooth.service", "upower.service"]
+        system_units = ["NetworkManager.service", "upower.service"]
         for u in system_units:
             try:
                 self._sudo_run(["systemctl", "enable", "--now", u], timeout=60)

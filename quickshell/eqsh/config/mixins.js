@@ -37,9 +37,6 @@ var mixins = {
         open: [],
         close: []
     },
-    "eqdesktop.controlCenter.bluetooth": {
-        open: []
-    },
     "eqdesktop.controlCenter.wifi": {
         open: []
     },

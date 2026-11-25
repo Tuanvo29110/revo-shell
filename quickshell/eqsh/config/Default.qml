@@ -175,7 +175,6 @@ Item {
 			"wifi",
 			"battery",
 			"search",
-			"bluetooth",
 			"controlCenter",
 			"ai",
 			"clock"

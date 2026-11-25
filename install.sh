@@ -362,7 +362,7 @@ install_packages() {
         git curl wget jq python python-pip which libnotify xdg-utils xdg-user-dirs desktop-file-utils
         procps-ng psmisc util-linux coreutils findutils fd gawk sed grep zenity
         pipewire pipewire-pulse wireplumber libpulse playerctl cava mpv-mpris
-        networkmanager bluez bluez-utils brightnessctl upower power-profiles-daemon lm_sensors ddcutil
+        networkmanager brightnessctl upower power-profiles-daemon lm_sensors ddcutil
         grim slurp wf-recorder hyprshot hyprpicker ffmpeg imagemagick wl-clipboard cliphist wtype swappy
         matugen hyprpaper swaybg mpvpaper swaync swayosd easyeffects
         kitty nautilus thunar rofi wofi fastfetch starship fish gnome-calculator
@@ -400,11 +400,11 @@ install_packages() {
       ;;
     debian)
       run "$SUDO apt-get update -y"
-      run "$SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y hyprland cmake ninja-build pkg-config git curl jq python3 python3-pip libnotify-bin xdg-utils grim slurp ffmpeg imagemagick wl-clipboard playerctl pipewire wireplumber network-manager bluez brightnessctl fonts-jetbrains-mono papirus-icon-theme rofi kitty fish"
+      run "$SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y hyprland cmake ninja-build pkg-config git curl jq python3 python3-pip libnotify-bin xdg-utils grim slurp ffmpeg imagemagick wl-clipboard playerctl pipewire wireplumber network-manager brightnessctl fonts-jetbrains-mono papirus-icon-theme rofi kitty fish"
       log "quickshell not in apt — build from https://git.outfoxxed.me/quickshell/quickshell"
       ;;
     fedora)
-      run "$SUDO dnf -y install hyprland cmake ninja-build git curl jq python3 python3-pip libnotify xdg-utils grim slurp ffmpeg wl-clipboard playerctl pipewire wireplumber NetworkManager bluez brightnessctl kitty fish"
+      run "$SUDO dnf -y install hyprland cmake ninja-build git curl jq python3 python3-pip libnotify xdg-utils grim slurp ffmpeg wl-clipboard playerctl pipewire wireplumber NetworkManager brightnessctl kitty fish"
       ;;
     *)
       log "unknown PM — install packages manually"
@@ -617,11 +617,11 @@ fix_paths() {
 # ── 6) Services ──────────────────────────────────────────────
 enable_services() {
   if [[ "$DRY_RUN" == "1" ]]; then
-    log "DRY: enable pipewire/NetworkManager/bluetooth"
+    log "DRY: enable pipewire/NetworkManager"
     return 0
   fi
   systemctl --user enable --now pipewire.service pipewire-pulse.service wireplumber.service 2>/dev/null || true
-  $SUDO systemctl enable --now NetworkManager.service bluetooth.service upower.service 2>/dev/null || true
+  $SUDO systemctl enable --now NetworkManager.service upower.service 2>/dev/null || true
 }
 
 # ── Health check (read-only) ──────────────────────────────────

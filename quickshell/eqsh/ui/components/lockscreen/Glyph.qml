@@ -6,7 +6,7 @@ Canvas {
     property string kind: ""
     property color color: "white"
     property real level: 3          // speaker / sun intensity 0..3, wifi bars 0..3, battery 0..100
-    property bool flag: false       // "disabled" slash for wifi / bluetooth
+    property bool flag: false       // "disabled" slash for wifi
     width: 18; height: 18
     antialiasing: true
     onKindChanged: requestPaint()
@@ -82,9 +82,6 @@ Canvas {
             }
             ctx.globalAlpha = 1;
             circ(9, 14.6, 1.3); ctx.fill();
-            if (flag) line(2.5, 2.5, 15.5, 15.5);
-        } else if (k === "bluetooth") {
-            poly([5, 5.5, 13, 12.5, 9, 16, 9, 2, 13, 5.5, 5, 12.5], false);
             if (flag) line(2.5, 2.5, 15.5, 15.5);
         } else if (k === "airplane") {
             line(9, 1.8, 9, 16.2);

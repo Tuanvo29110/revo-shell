@@ -217,38 +217,34 @@ Scope {
                         }
                         Loader {
                             active: contentView.currentIndex == 3
-                            sourceComponent: Bluetooth { property var history: settingsApp.history; property var contentViewO: contentView }
-                        }
-                        Loader {
-                            active: contentView.currentIndex == 4
                             sourceComponent: Network { property var history: settingsApp.history; property var contentViewO: contentView }
                         }
                         Loader {
-                            active: contentView.currentIndex == 5
+                            active: contentView.currentIndex == 4
                             sourceComponent: Energy { property var history: settingsApp.history; property var contentViewO: contentView }
                         }
                         Space { property var history: settingsApp.history; property var contentViewO: contentView }
                         Loader {
-                            active: contentView.currentIndex == 7
+                            active: contentView.currentIndex == 6
                             sourceComponent: General { property var history: settingsApp.history; property var contentViewO: contentView }
                         }
                         Loader {
-                            active: contentView.currentIndex == 8
+                            active: contentView.currentIndex == 7
                             sourceComponent: Appearance { property var history: settingsApp.history; property var contentViewO: contentView }
                         }
 
                         Loader {
-                            active: contentView.currentIndex == 9
+                            active: contentView.currentIndex == 8
                             sourceComponent: MenuBar { property var history: settingsApp.history; property var contentViewO: contentView }
                         }
 
                         Loader {
-                            active: contentView.currentIndex == 10
+                            active: contentView.currentIndex == 9
                             sourceComponent: Wallpaper { property var history: settingsApp.history; property var contentViewO: contentView }
                         }
 
                         Loader {
-                            active: contentView.currentIndex == 11
+                            active: contentView.currentIndex == 10
                             sourceComponent: Notifications { property var history: settingsApp.history; property var contentViewO: contentView }
                         }
 

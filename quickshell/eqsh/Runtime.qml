@@ -2,7 +2,6 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
-import Quickshell.Bluetooth
 import qs.config
 import qs.core.foundation
 import Quickshell.Io
@@ -52,7 +51,6 @@ Singleton {
     property bool   widgetEditMode: false
     onWidgetEditModeChanged: if (!widgetEditMode) { widgetAddOpen = false }
 
-    property var bluetoothAdapter: Bluetooth.defaultAdapter
     // ---- Function subscription system ----
     property var subscribers: ({}) // map of name -> function
 

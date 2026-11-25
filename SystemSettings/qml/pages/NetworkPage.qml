@@ -131,12 +131,6 @@ Column {
             subtitle: "Not Connected"
             chevron: false
         }
-        DetailRow {
-            separator: true
-            title: "Bluetooth PAN"
-            subtitle: "Off"
-            chevron: false
-        }
     }
 
     Item { width: 1; height: 4 }

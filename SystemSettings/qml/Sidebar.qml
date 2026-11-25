@@ -26,7 +26,6 @@ Item {
             name: "radio",
             items: [
                 { id: "wifi", title: "Wi‑Fi", icon: "sb_wifi" },
-                { id: "bluetooth", title: "Bluetooth", icon: "sb_bluetooth" },
                 { id: "network", title: "Network", icon: "sb_local-network" },
                 { id: "battery", title: "Battery", icon: "sb_battery", needsBattery: true },
                 { id: "energy", title: "Energy", icon: "sb_energy", noBattery: true }

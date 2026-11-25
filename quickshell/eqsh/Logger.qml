@@ -2,7 +2,6 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
-import Quickshell.Bluetooth
 import qs.config
 import Quickshell.Io
 

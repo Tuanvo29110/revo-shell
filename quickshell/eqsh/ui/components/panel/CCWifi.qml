@@ -1,5 +1,4 @@
 import Quickshell
-import Quickshell.Bluetooth
 import Quickshell.Widgets
 import QtQuick
 import QtQuick.Controls
