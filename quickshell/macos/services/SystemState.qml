@@ -9,9 +9,6 @@ import Quickshell.Io
 Singleton {
     id: root
 
-    // ---- Battery (menu bar) ----
-    property bool showBatteryPercent: false
-
     // ---- Power Mode (maps to powerprofilesctl) ----
     property string powerMode: "automatic"   // automatic | low | high
     function setPowerMode(m) {

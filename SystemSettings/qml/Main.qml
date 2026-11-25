@@ -28,10 +28,9 @@ ApplicationWindow {
 
     // a remembered pane that no longer exists falls back to General
     property string selectedId: Pages.info[lastPane.id] || Content.titles[lastPane.id] ? lastPane.id : "general"
-    // hardware presence decides which panes macOS shows (Battery vs Energy,
-    // Mouse, Trackpad) — same predicates as the representations in the
-    // extensions' Info.plist (powersource.battery, device.mouse, device.trackpad)
-    readonly property bool hasBattery: Shell.execOut("ls /sys/class/power_supply 2>/dev/null | grep -c '^BAT'", 800) !== "0"
+    // hardware presence decides which panes macOS shows (Mouse,
+    // Trackpad) — same predicates as the representations in the
+    // extensions' Info.plist (device.mouse, device.trackpad)
     readonly property bool hasTrackpad: Shell.execOut("grep -ci touchpad /proc/bus/input/devices", 800) !== "0"
     readonly property bool hasMouse: Shell.execOut("hyprctl devices -j 2>/dev/null | python3 -c \"import json,sys,re;d=json.load(sys.stdin);print(sum(1 for m in d.get('mice',[]) if not re.search('touchpad|consumer-control|syna|elan|trackpoint|ps/2',m['name'],re.I)))\"", 1500) !== "0"
     onSelectedIdChanged: if (shotIds.length === 0 && !testMode) lastPane.id = selectedId
@@ -204,7 +203,6 @@ ApplicationWindow {
             width: Theme.sidebarWidth - Theme.sidebarInset
             height: parent.height - 2 * Theme.sidebarInset
             selectedId: root.selectedId
-            hasBattery: root.hasBattery
             hasMouse: root.hasMouse
             hasTrackpad: root.hasTrackpad
             signedIn: accountStore.email.length > 0

@@ -10,7 +10,6 @@ Item {
     id: sidebar
 
     property string selectedId: "general"
-    property bool hasBattery: true
     property bool hasMouse: true
     property bool hasTrackpad: false
     property bool signedIn: false
@@ -27,8 +26,7 @@ Item {
             items: [
                 { id: "wifi", title: "Wi‑Fi", icon: "sb_wifi" },
                 { id: "network", title: "Network", icon: "sb_local-network" },
-                { id: "battery", title: "Battery", icon: "sb_battery", needsBattery: true },
-                { id: "energy", title: "Energy", icon: "sb_energy", noBattery: true }
+                { id: "energy", title: "Energy", icon: "sb_energy" }
             ]
         },
         {
@@ -110,10 +108,6 @@ Item {
     }
 
     function itemVisible(item) {
-        if (item.needsBattery && !hasBattery)
-            return false
-        if (item.noBattery && hasBattery)
-            return false
         if (item.needsMouse && !hasMouse)
             return false
         if (item.needsTrackpad && !hasTrackpad)

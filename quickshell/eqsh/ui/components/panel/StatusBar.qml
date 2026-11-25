@@ -456,7 +456,6 @@ Scope {
                   sourceComponent: {
                     switch(modelData) {
                       case "systemTray": return systemTrayComponent
-                      case "battery": return batteryComponent
                       case "wifi": return wifiComponent
                       case "search": return searchComponent
                       case "controlCenter": return controlCenterComponent
@@ -475,7 +474,6 @@ Scope {
 
           // Components for each item
           Component { id: systemTrayComponent; SystemTray {} }
-          Component { id: batteryComponent; Battery { iconSize: 25 } }
           Component { id: wifiComponent; UIBButton { Wifi { iconSize: 25 } } }
           Component {
             id: searchComponent

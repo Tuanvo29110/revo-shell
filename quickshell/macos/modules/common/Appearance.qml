@@ -84,7 +84,6 @@ Singleton {
     property bool dockAnimateHide: cfgGet("dockAnimateHide", true)
     property string dockPosition: cfgGet("dockPosition", "bottom")
     property bool menubarWifi: cfgGet("menubarWifi", true)
-    property bool menubarBattery: cfgGet("menubarBattery", true)
     property bool menubarSound: cfgGet("menubarSound", true)
     property bool menubarControlCenter: cfgGet("menubarControlCenter", true)
     property bool menubarSpotlight: cfgGet("menubarSpotlight", true)

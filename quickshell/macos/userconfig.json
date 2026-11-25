@@ -10,10 +10,6 @@
   "bar": {
     "showBackground": false
   },
-  "battery": {
-    "displayOff": "Never",
-    "lowPower": "Never"
-  },
   "darkMode": true,
   "dock": {
     "titleBarAction": "Zoom"
@@ -34,7 +30,6 @@
   "liquidGlass": "Clear",
   "liquidGlassIntensity": 0,
   "menubar": {
-    "battery": true,
     "clock": true,
     "controlcenter": true,
     "display": true,
@@ -47,7 +42,6 @@
     "weather": false,
     "wifi": true
   },
-  "menubarBattery": true,
   "menubarClock": true,
   "menubarDisplay": true,
   "menubarSpotlight": true,

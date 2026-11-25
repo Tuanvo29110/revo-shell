@@ -5,7 +5,7 @@ Canvas {
     id: gl
     property string kind: ""
     property color color: "white"
-    property real level: 3          // speaker / sun intensity 0..3, wifi bars 0..3, battery 0..100
+    property real level: 3          // speaker / sun intensity 0..3, wifi bars 0..3
     property bool flag: false       // "disabled" slash for wifi
     width: 18; height: 18
     antialiasing: true

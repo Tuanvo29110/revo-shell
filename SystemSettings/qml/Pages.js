@@ -1,7 +1,7 @@
 .pragma library
 
 // Root pages (sidebar destinations)
-var roots = ["appleId", "wifi", "network", "battery", "energy",
+var roots = ["appleId", "wifi", "network", "energy",
     "general", "accessibility", "appearance", "menuBar", "desktopDock",
     "displays", "spotlight", "wallpaper", "notifications", "sound", "focus",
     "screenTime", "lockScreen", "privacySecurity", "touchIDPassword",
@@ -12,7 +12,6 @@ var info = {
     appleId: { title: "Sign in", icon: "sb_signin", root: true },
     wifi: { title: "Wi-Fi", icon: "sb_wifi", root: true },
     network: { title: "Network", icon: "sb_local-network", root: true },
-    battery: { title: "Battery", icon: "sb_battery", root: true },
     energy: { title: "Energy", icon: "sb_energy", root: true },
     general: { title: "General", icon: "sb_gear", root: true },
     accessibility: { title: "Accessibility", icon: "sb_accessibility", root: true },
@@ -105,16 +104,12 @@ var info = {
 
     // Menu Bar sub-pages
     "menuBar.clock": { title: "Clock Options" },
-    "menuBar.battery": { title: "Battery Options" },
     "keyboard.input": { title: "Input Sources" },
 
     // Sound sub-pages
     "sound.effects": { title: "Sound Effects" },
     "sound.output": { title: "Output" },
-    "sound.input": { title: "Input" },
-
-    "battery.health": { title: "Battery Health" },
-    "battery.options": { title: "Options" }
+    "sound.input": { title: "Input" }
 }
 
 // Pages with a dedicated QML file (relative to qml/ directory)
@@ -140,9 +135,6 @@ var files = {
     "acct.deviceDetails": "pages/DeviceDetailsPage.qml",
     wifi: "pages/WifiPage.qml",
     network: "pages/NetworkPage.qml",
-    battery: "pages/BatteryPage.qml",
-    "battery.health": "pages/BatteryPage.qml",
-    "battery.options": "pages/BatteryPage.qml",
     icloud: "pages/IcloudPage.qml",
     trackpad: "pages/TrackpadPage.qml",
     "gen.about": "pages/AboutPage.qml",

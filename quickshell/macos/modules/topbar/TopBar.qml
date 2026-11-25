@@ -28,16 +28,6 @@ PanelWindow {
 
     property bool appleOpen: false
     property bool wifiOpen: false
-    property bool batteryOpen: false
-
-    // 10-step battery icon set (battery-000 .. battery-100, +charging)
-    function batteryIconSrc() {
-        var p = Math.round(Battery.percentage * 100);
-        var lvl = Math.max(0, Math.min(100, Math.round(p / 10) * 10));
-        var n = ("00" + lvl).slice(-3);
-        return Qt.resolvedUrl("../../assets/icons/battery/battery-" + n
-            + (Battery.isCharging ? "-charging" : "") + ".svg");
-    }
 
     readonly property color barFg: "#ffffff"
     readonly property color barFgDim: "#a0a0a8"
@@ -157,7 +147,7 @@ PanelWindow {
     property string openMenu: ""
 
     function closeAllMenus() {
-        root.appleOpen = false; root.wifiOpen = false; root.batteryOpen = false; root.openMenu = "";
+        root.appleOpen = false; root.wifiOpen = false; root.openMenu = "";
     }
     function openOne(name) {
         root.closeAllMenus();
@@ -165,7 +155,6 @@ PanelWindow {
         if (!name || name === "none") return;
         if (name === "apple") root.appleOpen = true;
         else if (name === "wifi") root.wifiOpen = true;
-        else if (name === "battery") root.batteryOpen = true;
         else root.openMenu = name;
     }
 
@@ -986,17 +975,15 @@ PanelWindow {
     Connections {
         target: root
         function syncGrab() {
-            const mine = [appleMenu, wifiPopup, batteryPopup, menuPopup];
+            const mine = [appleMenu, wifiPopup, menuPopup];
             const list = GlobalFocusGrab.dismissable.filter(w => mine.indexOf(w) === -1);
             if (root.appleOpen) list.push(appleMenu);
             if (root.wifiOpen) list.push(wifiPopup);
-            if (root.batteryOpen) list.push(batteryPopup);
             if (root.openMenu !== "") list.push(menuPopup);
             GlobalFocusGrab.dismissable = list;
         }
         function onAppleOpenChanged() { syncGrab(); }
         function onWifiOpenChanged() { syncGrab(); }
-        function onBatteryOpenChanged() { syncGrab(); }
         function onOpenMenuChanged() { syncGrab(); }
     }
 
@@ -1138,7 +1125,7 @@ PanelWindow {
 
         Item { Layout.fillWidth: true; Layout.preferredHeight: 1 }
 
-        // ---- Right side (left->right: Tray -> Recording -> Mic -> Battery -> Keyboard -> WiFi -> Spotlight -> CC -> Clock) ----
+        // ---- Right side (left->right: Tray -> Recording -> Mic -> Keyboard -> WiFi -> Spotlight -> CC -> Clock) ----
 
         // ---- System Tray (eqsh) ----
         Item {
@@ -1218,25 +1205,7 @@ PanelWindow {
             }
         }
 
-        // ---- Battery ----
-        Item {
-            id: batteryItem
-            visible: Battery.available && Appearance.menubarBattery
-            Layout.preferredWidth: 50; Layout.preferredHeight: parent.height
-            Rectangle { id: batteryBg; anchors.fill: parent; radius: 5; color: "transparent" }
-            Image {
-                anchors.centerIn: parent; width: 22; height: 22
-                source: root.batteryIconSrc()
-                sourceSize: Qt.size(22, 22)
-            }
-            MouseArea {
-                anchors.fill: parent; hoverEnabled: true
-                onEntered: batteryBg.color = root.barHover; onExited: batteryBg.color = "transparent"
-                onClicked: { root.anchor(batteryPopup, batteryItem); root.openOne(root.batteryOpen ? "none" : "battery"); }
-            }
-        }
-
-        // ---- Keyboard Language (after battery) ----
+        // ---- Keyboard Language ----
         Item {
             id: kbdItem
             visible: true
@@ -1690,122 +1659,6 @@ PanelWindow {
                 PopItem {
                     label: "Wi\u2011Fi Settings\u2026"
                     onClick: () => { root.wifiOpen = false; root.run("nm-connection-editor"); }
-                }
-            }
-        }
-    }
-
-    // ---- Battery popup ----
-    PopupWindow {
-        id: batteryPopup
-        parentWindow: root; screen: Quickshell.screens[0]
-        implicitWidth: 280; implicitHeight: 360; visible: root.batteryOpen; color: "transparent"
-        property real pct: Battery.percentage
-        property bool charging: Battery.isCharging
-        property bool full: Battery.isFull
-        readonly property string pctText: Math.round(pct * 100) + "%"
-        readonly property string holdText: {
-            if (full) return "Fully Charged";
-            if (charging) return "Charging On Hold";
-            return "On Battery";
-        }
-        readonly property string sourceText: {
-            if (charging || full) return "Power Adapter";
-            return "Battery";
-        }
-        Rectangle {
-            anchors.fill: parent; radius: 12
-            color: Qt.rgba(0.18, 0.18, 0.22, 0.45)
-            border.color: Appearance.menuBorder; border.width: 1
-            ColumnLayout {
-                anchors.fill: parent; anchors.margins: 10; spacing: 2
-
-                // Header: "Battery" + "On Hold: XX%"
-                RowLayout {
-                    Layout.fillWidth: true
-                    Text {
-                        text: "Battery"
-                        font { family: Appearance.fontFamily; pixelSize: 15; weight: Font.Bold }
-                        color: root.barFg; Layout.fillWidth: true
-                    }
-                    Text {
-                        text: batteryPopup.holdText
-                        font { family: Appearance.fontFamily; pixelSize: 13 }
-                        color: root.barFgDim
-                    }
-                }
-
-                // Power Source: Power Adapter
-                Text {
-                    text: "Power Source: " + batteryPopup.sourceText
-                    font { family: Appearance.fontFamily; pixelSize: 13 }
-                    color: root.barFg; Layout.fillWidth: true; Layout.topMargin: 4
-                }
-
-                // Charging On Hold / Charging / On Battery
-                Text {
-                    text: batteryPopup.holdText
-                    font { family: Appearance.fontFamily; pixelSize: 13 }
-                    color: root.barFg; Layout.fillWidth: true
-                }
-
-                PopSep {}
-
-                // Charge to Full Now
-                PopItem {
-                    label: "Charge to Full Now"
-                    onClick: () => root.run("echo force > /sys/class/power_supply/BAT*/charge_control_end_threshold 2>/dev/null || true")
-                }
-
-                PopSep {}
-
-                // Energy Mode header
-                Text {
-                    text: "Energy Mode"
-                    font { family: Appearance.fontFamily; pixelSize: 13; weight: Font.DemiBold }
-                    color: root.barFgDim; Layout.fillWidth: true; Layout.topMargin: 2
-                }
-
-                // Low Power toggle (always on - performance mode)
-                RowLayout {
-                    Layout.fillWidth: true; Layout.preferredHeight: 28
-                    Image {
-                        width: 16; height: 16
-                        source: Qt.resolvedUrl("../../assets/icons/tb-battery-good.svg")
-                        sourceSize: Qt.size(16, 16)
-                        Layout.alignment: Qt.AlignVCenter
-                    }
-                    Text {
-                        text: "Low Power"
-                        font { family: Appearance.fontFamily; pixelSize: 13 }
-                        color: root.barFg; Layout.fillWidth: true
-                    }
-                    Rectangle {
-                        width: 36; height: 20; radius: 10
-                        color: "#30d158"
-                        Layout.alignment: Qt.AlignVCenter
-                        Rectangle {
-                            x: 18; anchors.verticalCenter: parent.verticalCenter
-                            width: 16; height: 16; radius: 8; color: "#ffffff"
-                        }
-                    }
-                }
-
-                PopSep {}
-
-                // No Apps Using Significant Energy
-                Text {
-                    text: "No Apps Using Significant Energy"
-                    font { family: Appearance.fontFamily; pixelSize: 12 }
-                    color: root.barFgDim; Layout.fillWidth: true; Layout.topMargin: 2
-                }
-
-                PopSep {}
-
-                // Battery Settings
-                PopItem {
-                    label: "Battery Settings\u2026"
-                    onClick: () => { root.batteryOpen = false; Apps.launch("$HOME/.local/bin/systemsettings"); }
                 }
             }
         }

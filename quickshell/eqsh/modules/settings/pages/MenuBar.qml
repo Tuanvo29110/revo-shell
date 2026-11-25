@@ -236,11 +236,6 @@ ScrollView {
                         icon: "wifi.svg",
                         id: "wifi"
                     }, {
-                        name: "Battery",
-                        index: -1,
-                        icon: "battery.svg",
-                        id: "battery"
-                    }, {
                         name: "Spotlight",
                         index: -1,
                         icon: "search.svg",

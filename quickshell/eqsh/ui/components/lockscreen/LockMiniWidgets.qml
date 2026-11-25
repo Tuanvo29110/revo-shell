@@ -2,34 +2,16 @@ import QtQuick
 import QtQuick.Shapes
 import Quickshell
 import Quickshell.Io
-import Quickshell.Services.UPower
 import qs.config
 import qs.ui.controls.providers
 
-// Sapphire-style mini widgets under the media panel: headphone battery
-// (UPower), Do Not Disturb and the running timer (Atoll). The Mac's own
-// battery is already shown at the top right, so it has no tile here.
+// Sapphire-style mini widgets under the media panel: Do Not Disturb and the
+// running timer (Atoll).
 Row {
 	id: mw
 	property var atoll: null           // Atoll heartbeat (state.json) when it runs
 	spacing: 14
 	height: 58
-
-	readonly property var bat: UPower.displayDevice
-	readonly property real batPct: bat && bat.isPresent ? Math.round(bat.percentage <= 1 ? bat.percentage * 100 : bat.percentage) : -1
-	readonly property bool charging: bat ? (bat.state === UPowerDeviceState.Charging || bat.state === UPowerDeviceState.FullyCharged) : false
-	readonly property var phones: {
-		const out = []
-		const ds = UPower.devices.values
-		for (let i = 0; i < ds.length; i++) {
-			const d = ds[i]
-			if (d.type === UPowerDeviceType.Headphones || d.type === UPowerDeviceType.Headset) {
-				const p = d.percentage
-				out.push({ name: d.model || "Headphones", pct: Math.round(p <= 1 ? p * 100 : p) })
-			}
-		}
-		return out
-	}
 
 	// Do Not Disturb lives in the mac shell's settings (focus.dnd / focus.sleep)
 	property bool dnd: false
@@ -95,16 +77,6 @@ Row {
 		}
 	}
 
-	Repeater {
-		model: mw.phones
-		delegate: Tile {
-			required property var modelData
-			value: modelData.pct
-			ring: modelData.pct <= 20 ? "#FF453A" : "white"
-			icon: "headphones"
-			label: modelData.pct + "%"
-		}
-	}
 	Tile {
 		visible: mw.dnd
 		icon: "moon"

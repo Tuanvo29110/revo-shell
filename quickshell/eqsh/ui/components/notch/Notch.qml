@@ -1,7 +1,6 @@
 import QtQuick.Controls.Fusion
 import Quickshell.Wayland
 import Quickshell.Widgets
-import Quickshell.Services.UPower
 import Quickshell.Io
 import Quickshell
 import QtQuick
@@ -59,7 +58,6 @@ Scope {
   property bool firstTimeRunning: Config.account.firstTimeRunning
   property bool loadedConfig: Config.loaded
   property bool dndMode: NotificationDaemon.popupInhibited
-  readonly property bool batCharging: UPower.onBattery ? (UPower.displayDevice.state == UPowerDeviceState.Charging) : true
 
   property var details: QtObject {
     property list<string> supportedVersions: ["0.1.2", "Elephant-1", "Elephant-2"]
@@ -68,7 +66,6 @@ Scope {
 
   property var notchRegistry: {
     "welcome": { path: "Welcome.qml" },
-    "charging": { path: "Charging.qml" },
     "dnd": { path: "DND.qml" },
     "lock": { path: "Lock.qml" },
     "audio": { path: "Audio.qml" }
@@ -139,7 +136,6 @@ Scope {
   }
 
   onDndModeChanged: launchByRId("dnd")
-  onBatChargingChanged: if (batCharging) launchByRId("charging")
   onLockedChanged: {
     if (locked) {
       launchByRId("lock")

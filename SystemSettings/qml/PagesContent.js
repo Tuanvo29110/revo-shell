@@ -852,30 +852,6 @@ content["privacy.firewall"] = [
     { note: "The firewall blocks unwanted network connections from other computers." }
 ]
 
-content["battery"] = [
-    { header: "Battery", rows: [
-        { t: "Battery Level", v: "84%" },
-        { t: "Time on Battery", v: "4:32 remaining" },
-        { t: "Power Source", v: "Battery" }
-    ] },
-    { header: "Options", rows: [
-        { t: "Low Power Mode", v: "Never" },
-        { t: "Show battery percentage in menu bar", sw: true, on: true },
-        { t: "Optimise video watching while on battery", sw: true, on: true }
-    ] },
-    { header: "Battery Health", rows: [
-        { t: "Condition", v: "Normal", to: "battery.health" },
-        { t: "Maximum Capacity", v: "96%" }
-    ] }
-]
-content["battery.health"] = [
-    { rows: [
-        { t: "Normal", s: "Battery is functioning normally.", dim: true },
-        { t: "Manage battery charging…", c: true }
-    ] },
-    { note: "Optimised Battery Charging reduces battery ageing by learning your daily charging routine." }
-]
-
 content["energy"] = [
     { header: "Energy Mode", rows: [
         { t: "Low Power", sw: false, on: false },
@@ -1383,13 +1359,6 @@ content["menuBar.clock"] = [
         { t: "Display the time with seconds", sw: true, cfg: "clockSeconds", def: false }
     ] }
 ]
-content["menuBar.battery"] = [
-    { rows: [
-        { t: "Show Percentage", sw: true, cfg: "menubarBatteryPercent", def: false },
-        { t: "Show Energy Mode", sw: true, cfg: "menubarEnergyMode", def: false }
-    ] }
-]
 titles["keyboard.input"] = "Input Sources"
 titles["mouse"] = "Mouse"
 titles["menuBar.clock"] = "Clock Options"
-titles["menuBar.battery"] = "Battery Options"

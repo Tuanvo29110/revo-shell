@@ -58,7 +58,6 @@ Scope {
 		property var categories: [
 			"special:search",
 			"special:all",
-			"Battery",
 			"Clock",
 			"Calender",
 			"Weather",

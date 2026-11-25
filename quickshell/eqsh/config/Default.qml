@@ -173,15 +173,11 @@ Item {
 		property list<string> rightBarItems: [
 			"systemTray",
 			"wifi",
-			"battery",
 			"search",
 			"controlCenter",
 			"ai",
 			"clock"
 		]
-		property string batteryFormat: "%p%"
-		property string batteryFormatChargin: "*%p%"
-  		property string batteryMode: "pill" // pill, percentage, number, number-pill, percentage-pill, bubble
 		property string defaultAppName: "Equora" // When no toplevel is focused it will show this text. Ideas: "Equora" | "eqSh" | "Hyprland" | "YOURUSERNAME"
 		// Example dateFormats:
 		// DEFAULT:

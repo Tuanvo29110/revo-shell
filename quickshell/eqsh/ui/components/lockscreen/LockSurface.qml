@@ -432,8 +432,8 @@ Rectangle {
 			z: 15
 		}
 
-		// Sapphire-style mini widgets under the media panel (battery, headphones,
-		// Do Not Disturb, Atoll timer)
+		// Sapphire-style mini widgets under the media panel (Do Not
+		// Disturb, Atoll timer)
 		LockMiniWidgets {
 			anchors.horizontalCenter: parent.horizontalCenter
 			anchors.top: mediaGlass.bottom
@@ -1083,17 +1083,6 @@ Rectangle {
 			font.weight: Font.Bold
 
 			text: {Time.getTime(Config.lockScreen.dateFormat)}
-		}
-
-		Rectangle {
-			id: batteryIndicator
-			anchors {
-				top: parent.top
-				right: parent.right
-				topMargin: 20
-				rightMargin: 60
-			}
-			Battery {}
 		}
 
 		Rectangle {

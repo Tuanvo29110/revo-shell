@@ -119,7 +119,6 @@ Window {
         ]} ],
         menubar: [ { title:"", rows:[
             { kind:"toggle", key:"menubar.wifi", label:"Wi‑Fi" },
-            { kind:"toggle", key:"menubar.battery", label:"Battery" },
             { kind:"toggle", key:"menubar.sound", label:"Sound" },
             { kind:"toggle", key:"menubar.controlcenter", label:"Control Center" },
             { kind:"toggle", key:"menubar.spotlight", label:"Spotlight" },
@@ -174,7 +173,7 @@ Window {
         screentime: [ { title:"", rows:[ { kind:"nav", label:"App Usage", value:"" }, { kind:"nav", label:"Downtime", value:"" }, { kind:"nav", label:"App Limits", value:"" }, { kind:"nav", label:"Always Allowed", value:"" } ]} ],
         lockscreen: [ { title:"", rows:[
             { kind:"popup", key:"screenSaver", value:"After 5 minutes", label:"Start Screen Saver when inactive" },
-            { kind:"popup", key:"turnOff", value:"After 10 minutes", label:"Turn display off on battery when inactive" },
+            { kind:"popup", key:"turnOff", value:"After 10 minutes", label:"Turn display off when inactive" },
             { kind:"toggle", key:"reqPassword", label:"Require password after screen saver begins" }
         ]} ],
         privacy: [ { title:"", rows:[
@@ -223,7 +222,6 @@ Window {
         controlcenter: [ { title:"", rows:[
             { kind:"toggle", key:"ccWifi", label:"Wi‑Fi" },
             { kind:"toggle", key:"ccAirDrop", label:"AirDrop" },
-            { kind:"toggle", key:"ccBattery", label:"Battery" },
             { kind:"toggle", key:"ccMirror", label:"Screen Mirroring" },
             { kind:"toggle", key:"ccFocus", label:"Focus" },
             { kind:"toggle", key:"ccNowPlaying", label:"Now Playing" },

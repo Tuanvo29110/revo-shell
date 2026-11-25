@@ -4,7 +4,6 @@ import QtQuick.Effects
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Io
-import Quickshell.Services.UPower
 import qs
 import qs.config
 import qs.ui.controls.windows
@@ -204,8 +203,6 @@ Scope {
                         Location: ${Config.widgets.location}
                         Temperature: ${Config.widgets.temperature}
                         Temperature high/low: ${Config.widgets.hlVal}
-                        Battery percentage: ${(UPower.displayDevice.isLaptopBattery ? UPower.displayDevice.percentage : 1)*100}
-                        Battery powered: ${UPower.onBattery}
                         Eqsh Version: ${Config.version} / ${Config.versionPretty}
                         `)
                         onAccepted: {

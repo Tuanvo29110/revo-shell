@@ -96,7 +96,6 @@ qt_add_qml_module(systemsettings
     qml/pages/DeviceDetailsPage.qml
     qml/pages/WifiPage.qml
     qml/pages/NetworkPage.qml
-    qml/pages/BatteryPage.qml
     qml/pages/IcloudPage.qml
         qml/pages/DockPreview.qml
         qml/pages/DesktopDockPage.qml
